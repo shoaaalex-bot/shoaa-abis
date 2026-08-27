@@ -6,18 +6,70 @@
   <title>منصة شعاع - فرع أبيس</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <style>
-    body { background-color: #f4f6f9; font-family: system-ui, -apple-system, sans-serif; }
-    .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .meter-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; cursor: pointer; }
+    /* خلفية متناسقة ومريحة جداً للعين */
+    body { 
+      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%); 
+      font-family: system-ui, -apple-system, sans-serif; 
+      color: #334155;
+      min-height: 100vh;
+    }
+    .card { 
+      border: none; 
+      border-radius: 16px; 
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); 
+      background-color: #ffffff;
+    }
+    .meter-img { 
+      width: 50px; 
+      height: 50px; 
+      object-fit: cover; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      border: 1px solid #cbd5e1;
+    }
     .site-logo { width: 45px; height: 45px; object-fit: contain; }
     .main-logo { width: 130px; height: 130px; object-fit: contain; }
-    .welcome-box { background: #e8f4fd; border-right: 4px solid #0d6efd; border-radius: 8px; padding: 15px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: #084298; }
     
-    /* تنسيق اللون الذهبي الفاخر للاسم */
+    /* صندوق الترحيب بتصميم مريح وهادئ */
+    .welcome-box { 
+      background: #f8fafc; 
+      border-right: 4px solid #0284c7; 
+      border-radius: 10px; 
+      padding: 16px; 
+      margin-bottom: 24px; 
+      font-size: 14px; 
+      line-height: 1.7; 
+      color: #334155;
+      border-top: 1px solid #e2e8f0;
+      border-left: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    /* اللون الذهبي الفاخر للاسم الرئيسي فقط */
     .gold-title {
-      color: #b8860b !important; /* لون ذهبي داكن وواضح */
+      color: #b8860b !important;
       font-weight: 800;
-      text-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+      text-shadow: 0px 1px 1px rgba(0,0,0,0.05);
+    }
+
+    .form-control {
+      border-radius: 8px;
+      padding: 10px 14px;
+      border-color: #cbd5e1;
+    }
+    .form-control:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 0.2rem rgba(2, 132, 199, 0.15);
+    }
+    .btn-primary {
+      background-color: #0284c7;
+      border-color: #0284c7;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .btn-primary:hover {
+      background-color: #0369a1;
+      border-color: #0369a1;
     }
   </style>
 </head>
@@ -39,39 +91,40 @@
           
           <!-- النص الترحيبي -->
           <div class="welcome-box">
-            <strong>شركة شعاع للخدمات العامة - بالتعاون مع الشركة القابضة للكهرباء</strong>
-            <p class="mb-0 mt-1">نرحب بكم. تأتي هذه المنصة سعياً لتوفير الراحة للمواطنين وخدمتكم في أخذ القراءات في مواعيدها السليمة، حرصاً منا على دقة الاستهلاك وعدم الإضرار بالصالح العام للمواطن.</p>
+            <strong class="text-primary">شركة شعاع للخدمات العامة - بالتعاون مع الشركة القابضة للكهرباء</strong>
+            <p class="mb-0 mt-2">نرحب بكم. تأتي هذه المنصة سعياً لتوفير الراحة للمواطنين وخدمتكم في أخذ القراءات في مواعيدها السليمة، حرصاً منا على دقة الاستهلاك وعدم الإضرار بالصالح العام للمواطن.</p>
           </div>
 
           <div class="text-center">
             <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
-            <h4 class="gold-title mb-1">تسجيل قراءة العداد</h4>
+            <!-- تم إرجاع هذا العنوان للون الأزرق المريح -->
+            <h4 class="text-primary fw-bold mb-1">تسجيل قراءة العداد</h4>
             <p class="text-muted small mb-4">الشركة القابضة لكهرباء مصر - خدمات القراءة</p>
           </div>
           
           <form id="readingForm" class="text-start">
             <div class="mb-3">
-              <label class="form-label fw-bold">رقم المشترك</label>
+              <label class="form-label fw-bold small">رقم المشترك</label>
               <input type="text" id="accNo" class="form-control" placeholder="أدخل رقم المشترك" required>
             </div>
             
             <div class="mb-3">
-              <label class="form-label fw-bold">قراءة العداد الحالية</label>
+              <label class="form-label fw-bold small">قراءة العداد الحالية</label>
               <input type="number" id="meterVal" class="form-control" placeholder="أدخل القراءة" required>
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold">صورة العداد</label>
+              <label class="form-label fw-bold small">صورة العداد</label>
               <input type="file" id="meterImgInput" class="form-control" accept="image/*" required>
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold">صورة إيصال الكهرباء</label>
+              <label class="form-label fw-bold small">صورة إيصال الكهرباء</label>
               <input type="file" id="receiptImgInput" class="form-control" accept="image/*">
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold">موقع العداد (اللوكيشن)</label>
+              <label class="form-label fw-bold small">موقع العداد (اللوكيشن)</label>
               <div class="input-group">
                 <input type="text" id="locationInput" class="form-control" placeholder="اضغط على زر تحديد الموقع" readonly required>
                 <button type="button" class="btn btn-outline-secondary" id="getLocationBtn">📍 تحديد موقعي</button>
@@ -79,11 +132,11 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold">الشكاوى أو المقترحات (اختياري)</label>
+              <label class="form-label fw-bold small">الشكاوى أو المقترحات (اختياري)</label>
               <textarea id="complaintInput" class="form-control" rows="2" placeholder="اكتب شكواك أو مقترحك إن وجد..."></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">إرسال القراءة</button>
+            <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm">إرسال القراءة</button>
           </form>
         </div>
       </div>
@@ -91,7 +144,7 @@
   </div>
 
   <div class="container py-4 d-none" id="adminView">
-    <h4 class="mb-4 gold-title">لوحة تحكم فرع أبيس (مراجعة القراءات والشكاوى)</h4>
+    <h4 class="mb-4 text-primary fw-bold">لوحة تحكم فرع أبيس (مراجعة القراءات والشكاوى)</h4>
     <div class="card p-3">
       <div class="table-responsive">
         <table class="table table-hover align-middle" id="readingsTable">
