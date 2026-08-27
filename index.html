@@ -51,6 +51,7 @@
       cursor: pointer;
       user-select: none;
       letter-spacing: -0.5px;
+      text-shadow: 0 1px 2px rgba(217, 119, 6, 0.15);
     }
     .form-label {
       font-weight: 700;
@@ -145,8 +146,8 @@
           </div>
 
           <div class="col-md-6">
-            <label class="form-label">صورة إيصال الكهرباء <span class="text-muted fw-normal">(اختياري)</span></label>
-            <input type="file" id="receiptImgInput" class="form-control" accept="image/*">
+            <label class="form-label">صورة إيصال الكهرباء <span class="text-danger">*</span></label>
+            <input type="file" id="receiptImgInput" class="form-control" accept="image/*" required>
           </div>
 
           <div class="col-md-6">
