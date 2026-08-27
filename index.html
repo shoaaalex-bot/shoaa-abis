@@ -11,6 +11,7 @@
     .meter-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; cursor: pointer; }
     .site-logo { width: 45px; height: 45px; object-fit: contain; }
     .main-logo { width: 130px; height: 130px; object-fit: contain; }
+    .welcome-box { background: #e8f4fd; border-right: 4px solid #0d6efd; border-radius: 8px; padding: 15px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: #084298; }
   </style>
 </head>
 <body>
@@ -27,10 +28,19 @@
   <div class="container py-4" id="clientView">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <div class="card p-4 text-center">
-          <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
-          <h4 class="text-primary mb-1">تسجيل قراءة العداد</h4>
-          <p class="text-muted small mb-4">الشركة القابضة لكهرباء مصر - خدمات القراءة</p>
+        <div class="card p-4">
+          
+          <!-- النص الترحيبي المحدث -->
+          <div class="welcome-box">
+            <strong>شركة شعاع للخدمات العامة - بالتعاون مع الشركة القابضة للكهرباء</strong>
+            <p class="mb-0 mt-1">نرحب بكم. تأتي هذه المنصة سعياً لتوفير الراحة للمواطنين وخدمتكم في أخذ القراءات في مواعيدها السليمة، حرصاً منا على دقة الاستهلاك وعدم الإضرار بالصالح العام للمواطن.</p>
+          </div>
+
+          <div class="text-center">
+            <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
+            <h4 class="text-primary mb-1">تسجيل قراءة العداد</h4>
+            <p class="text-muted small mb-4">الشركة القابضة لكهرباء مصر - خدمات القراءة</p>
+          </div>
           
           <form id="readingForm" class="text-start">
             <div class="mb-3">
@@ -61,6 +71,11 @@
               </div>
             </div>
 
+            <div class="mb-3">
+              <label class="form-label fw-bold">الشكاوى أو المقترحات (اختياري)</label>
+              <textarea id="complaintInput" class="form-control" rows="2" placeholder="اكتب شكواك أو مقترحك إن وجد..."></textarea>
+            </div>
+
             <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">إرسال القراءة</button>
           </form>
         </div>
@@ -69,17 +84,18 @@
   </div>
 
   <div class="container py-4 d-none" id="adminView">
-    <h4 class="mb-4 text-primary">لوحة تحكم فرع أبيس (مراجعة القراءات)</h4>
+    <h4 class="mb-4 text-primary">لوحة تحكم فرع أبيس (مراجعة القراءات والشكاوى)</h4>
     <div class="card p-3">
       <div class="table-responsive">
         <table class="table table-hover align-middle" id="readingsTable">
           <thead>
             <tr>
-              <th>صورة العداد</th>
+              <th>العداد</th>
               <th>الإيصال</th>
-              <th>رقم المشترك</th>
+              <th>المشترك</th>
               <th>القراءة</th>
               <th>الموقع</th>
+              <th>الشكوى</th>
               <th>الحالة</th>
             </tr>
           </thead>
@@ -132,6 +148,7 @@
       e.preventDefault();
       const acc = document.getElementById('accNo').value;
       const val = document.getElementById('meterVal').value;
+      const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
       const meterFile = document.getElementById('meterImgInput').files[0];
       const receiptFile = document.getElementById('receiptImgInput').files[0];
 
@@ -144,23 +161,20 @@
       readerMeter.onload = function(evtMeter) {
         const meterSrc = evtMeter.target.result;
         
-        let receiptHtml = '<span class="text-muted small">لا يوجد</span>';
-
         if (receiptFile) {
           const readerReceipt = new FileReader();
           readerReceipt.onload = function(evtReceipt) {
-            const receiptSrc = evtReceipt.target.result;
-            appendRow(meterSrc, receiptSrc, acc, val, currentCoords);
+            appendRow(meterSrc, evtReceipt.target.result, acc, val, currentCoords, complaint);
           };
           readerReceipt.readAsDataURL(receiptFile);
         } else {
-          appendRow(meterSrc, null, acc, val, currentCoords);
+          appendRow(meterSrc, null, acc, val, currentCoords, complaint);
         }
       };
       readerMeter.readAsDataURL(meterFile);
     });
 
-    function appendRow(meterSrc, receiptSrc, acc, val, coords) {
+    function appendRow(meterSrc, receiptSrc, acc, val, coords, complaint) {
       const receiptCell = receiptSrc ? `<img src="${receiptSrc}" class="meter-img" onclick="window.open('${receiptSrc}')">` : '<span class="text-muted small">بدون</span>';
       const mapsLink = `https://www.google.com/maps?q=${coords}`;
 
@@ -170,12 +184,13 @@
           <td>${receiptCell}</td>
           <td>${acc}</td>
           <td>${val} kWh</td>
-          <td><a href="${mapsLink}" target="_blank" class="btn btn-sm btn-outline-primary">عرض الخريطة</a></td>
+          <td><a href="${mapsLink}" target="_blank" class="btn btn-sm btn-outline-primary">الخريطة</a></td>
+          <td><small class="text-danger">${complaint}</small></td>
           <td><span class="badge bg-warning text-dark">قيد المراجعة</span></td>
         </tr>
       `;
       tableBody.insertAdjacentHTML('afterbegin', row);
-      alert('تم إرسال القراءة وصورة العداد والموقع بنجاح!');
+      alert('تم إرسال بياناتك والشكوى بنجاح!');
       form.reset();
       locationInput.value = "";
       getLocationBtn.textContent = "📍 تحديد موقعي";
