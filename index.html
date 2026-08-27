@@ -102,12 +102,17 @@
       
       <form id="readingForm">
         <div class="row g-4">
-          <div class="col-md-6">
+          <div class="col-md-4">
+            <label class="form-label fw-bold">اسم المشترك <span class="text-muted fw-normal">(اختياري)</span></label>
+            <input type="text" id="clientName" class="form-control" placeholder="أدخل اسم المشترك">
+          </div>
+
+          <div class="col-md-4">
             <label class="form-label fw-bold">رقم المشترك</label>
             <input type="text" id="accNo" class="form-control" placeholder="أدخل رقم المشترك" required>
           </div>
           
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label class="form-label fw-bold">قراءة العداد الحالية</label>
             <input type="number" id="meterVal" class="form-control" placeholder="أدخل القراءة" required>
           </div>
@@ -207,6 +212,7 @@
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const acc = document.getElementById('accNo').value;
       const val = document.getElementById('meterVal').value;
       const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
@@ -225,17 +231,17 @@
         if (receiptFile) {
           const readerReceipt = new FileReader();
           readerReceipt.onload = function(evtReceipt) {
-            appendRow(meterSrc, evtReceipt.target.result, acc, val, currentCoords, complaint);
+            appendRow(meterSrc, evtReceipt.target.result, name, acc, val, currentCoords, complaint);
           };
           readerReceipt.readAsDataURL(receiptFile);
         } else {
-          appendRow(meterSrc, null, acc, val, currentCoords, complaint);
+          appendRow(meterSrc, null, name, acc, val, currentCoords, complaint);
         }
       };
       readerMeter.readAsDataURL(meterFile);
     });
 
-    function appendRow(meterSrc, receiptSrc, acc, val, coords, complaint) {
+    function appendRow(meterSrc, receiptSrc, name, acc, val, coords, complaint) {
       const receiptCell = receiptSrc ? `<img src="${receiptSrc}" class="meter-img" onclick="window.open('${receiptSrc}')">` : '<span class="text-muted small">بدون</span>';
       const mapsLink = `https://www.google.com/maps?q=${coords}`;
 
@@ -243,7 +249,10 @@
         <tr>
           <td><img src="${meterSrc}" class="meter-img" onclick="window.open('${meterSrc}')"></td>
           <td>${receiptCell}</td>
-          <td>${acc}</td>
+          <td>
+            <strong>${name}</strong><br>
+            <small class="text-muted">رقم: ${acc}</small>
+          </td>
           <td>${val} kWh</td>
           <td><a href="${mapsLink}" target="_blank" class="btn btn-sm btn-outline-primary">الخريطة</a></td>
           <td><small class="text-danger">${complaint}</small></td>
