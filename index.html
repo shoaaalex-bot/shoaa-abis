@@ -9,15 +9,19 @@
     body { background-color: #f4f6f9; font-family: system-ui, -apple-system, sans-serif; }
     .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     .meter-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
-    .site-logo { width: 45px; height: 45px; object-fit: contain; border-radius: 50%; }
-    .main-logo { width: 130px; height: 130px; object-fit: contain; border-radius: 50%; }
+    .site-logo { width: 45px; height: 45px; object-fit: contain; }
+    .main-logo { width: 130px; height: 130px; object-fit: contain; }
   </style>
 </head>
 <body>
   <nav class="navbar navbar-light bg-white border-bottom shadow-sm">
     <div class="container d-flex justify-content-between align-items-center">
       <a class="navbar-brand text-primary fw-bold d-flex align-items-center gap-2" href="#">
-        <img src="https://i.postimg.cc/6qKxP87T/shoaa-logo.png" alt="شعاع" class="site-logo">
+        <svg class="site-logo" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#f4e093" stroke="#b8860b" stroke-width="4"/>
+          <circle cx="50" cy="50" r="42" fill="#71c5e8"/>
+          <path d="M50 20 L58 40 L45 45 L65 75 L35 50 L48 45 Z" fill="#b8860b" stroke="#fff" stroke-width="2"/>
+        </svg>
         <span>شركة شعاع - فرع أبيس</span>
       </a>
       <button class="btn btn-sm btn-outline-primary" id="toggleView">لوحة التحكم</button>
@@ -28,7 +32,15 @@
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="card p-4 text-center">
-          <img src="https://i.postimg.cc/6qKxP87T/shoaa-logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
+          <div class="mb-3">
+            <svg class="main-logo mx-auto" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="48" fill="#f4e093" stroke="#b8860b" stroke-width="3"/>
+              <circle cx="50" cy="50" r="42" fill="#71c5e8"/>
+              <path d="M20 70 L30 40 L40 70 Z" fill="#333"/>
+              <path d="M70 70 L80 35 L90 70 Z" fill="#333"/>
+              <path d="M50 22 L58 42 L45 47 L65 78 L35 52 L48 47 Z" fill="#d4af37" stroke="#333" stroke-width="1.5"/>
+            </svg>
+          </div>
           <h4 class="text-primary mb-1">تسجيل قراءة العداد</h4>
           <p class="text-muted small mb-4">الشركة القابضة لكهرباء مصر - خدمات القراءة</p>
           
