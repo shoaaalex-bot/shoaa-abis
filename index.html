@@ -8,9 +8,9 @@
   <style>
     body { background-color: #f4f6f9; font-family: system-ui, -apple-system, sans-serif; }
     .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .meter-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+    .meter-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; cursor: pointer; }
     .site-logo { width: 45px; height: 45px; object-fit: contain; }
-    .main-logo { width: 140px; height: 140px; object-fit: contain; }
+    .main-logo { width: 130px; height: 130px; object-fit: contain; }
   </style>
 </head>
 <body>
@@ -37,14 +37,30 @@
               <label class="form-label fw-bold">رقم المشترك</label>
               <input type="text" id="accNo" class="form-control" placeholder="أدخل رقم المشترك" required>
             </div>
+            
             <div class="mb-3">
               <label class="form-label fw-bold">قراءة العداد الحالية</label>
               <input type="number" id="meterVal" class="form-control" placeholder="أدخل القراءة" required>
             </div>
+
             <div class="mb-3">
               <label class="form-label fw-bold">صورة العداد</label>
               <input type="file" id="meterImgInput" class="form-control" accept="image/*" required>
             </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">صورة إيصال الكهرباء</label>
+              <input type="file" id="receiptImgInput" class="form-control" accept="image/*">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">موقع العداد (اللوكيشن)</label>
+              <div class="input-group">
+                <input type="text" id="locationInput" class="form-control" placeholder="اضغط على زر تحديد الموقع" readonly required>
+                <button type="button" class="btn btn-outline-secondary" id="getLocationBtn">📍 تحديد موقعي</button>
+              </div>
+            </div>
+
             <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">إرسال القراءة</button>
           </form>
         </div>
@@ -60,8 +76,10 @@
           <thead>
             <tr>
               <th>صورة العداد</th>
+              <th>الإيصال</th>
               <th>رقم المشترك</th>
               <th>القراءة</th>
+              <th>الموقع</th>
               <th>الحالة</th>
             </tr>
           </thead>
@@ -77,6 +95,10 @@
     const adminView = document.getElementById('adminView');
     const form = document.getElementById('readingForm');
     const tableBody = document.querySelector('#readingsTable tbody');
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const locationInput = document.getElementById('locationInput');
+    
+    let currentCoords = "";
 
     toggleBtn.addEventListener('click', () => {
       clientView.classList.toggle('d-none');
@@ -84,30 +106,82 @@
       toggleBtn.textContent = clientView.classList.contains('d-none') ? 'شاشة المشترك' : 'لوحة التحكم';
     });
 
+    getLocationBtn.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        getLocationBtn.textContent = "جاري التحديد...";
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            currentCoords = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            locationInput.value = currentCoords;
+            getLocationBtn.textContent = "📍 تم التحديد بنجاح";
+            getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
+          },
+          (error) => {
+            alert('فشل تحديد الموقع. تأكد من السماح للمتصفح بالوصول لموقعك.');
+            getLocationBtn.textContent = "📍 تحديد موقعي";
+          }
+        );
+      } else {
+        alert('متصفحك لا يدعم تحديد الموقع الجغرافي.');
+      }
+    });
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const acc = document.getElementById('accNo').value;
       const val = document.getElementById('meterVal').value;
-      const file = document.getElementById('meterImgInput').files[0];
+      const meterFile = document.getElementById('meterImgInput').files[0];
+      const receiptFile = document.getElementById('receiptImgInput').files[0];
 
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          const row = `
-            <tr>
-              <td><img src="${evt.target.result}" class="meter-img" onclick="window.open('${evt.target.result}')"></td>
-              <td>${acc}</td>
-              <td>${val} kWh</td>
-              <td><span class="badge bg-warning text-dark">قيد المراجعة</span></td>
-            </tr>
-          `;
-          tableBody.insertAdjacentHTML('afterbegin', row);
-          alert('تم إرسال القراءة والصورة بنجاح!');
-          form.reset();
-        };
-        reader.readAsDataURL(file);
+      if (!currentCoords) {
+        alert('الرجاء تحديد موقع العداد (اللوكيشن) أولاً!');
+        return;
       }
+
+      const readerMeter = new FileReader();
+      readerMeter.onload = function(evtMeter) {
+        const meterSrc = evtMeter.target.result;
+        
+        let receiptHtml = '<span class="text-muted small">لا يوجد</span>';
+
+        if (receiptFile) {
+          const readerReceipt = new FileReader();
+          readerReceipt.onload = function(evtReceipt) {
+            const receiptSrc = evtReceipt.target.result;
+            appendRow(meterSrc, receiptSrc, acc, val, currentCoords);
+          };
+          readerReceipt.readAsDataURL(receiptFile);
+        } else {
+          appendRow(meterSrc, null, acc, val, currentCoords);
+        }
+      };
+      readerMeter.readAsDataURL(meterFile);
     });
+
+    function appendRow(meterSrc, receiptSrc, acc, val, coords) {
+      const receiptCell = receiptSrc ? `<img src="${receiptSrc}" class="meter-img" onclick="window.open('${receiptSrc}')">` : '<span class="text-muted small">بدون</span>';
+      const mapsLink = `https://www.google.com/maps?q=${coords}`;
+
+      const row = `
+        <tr>
+          <td><img src="${meterSrc}" class="meter-img" onclick="window.open('${meterSrc}')"></td>
+          <td>${receiptCell}</td>
+          <td>${acc}</td>
+          <td>${val} kWh</td>
+          <td><a href="${mapsLink}" target="_blank" class="btn btn-sm btn-outline-primary">عرض الخريطة</a></td>
+          <td><span class="badge bg-warning text-dark">قيد المراجعة</span></td>
+        </tr>
+      `;
+      tableBody.insertAdjacentHTML('afterbegin', row);
+      alert('تم إرسال القراءة وصورة العداد والموقع بنجاح!');
+      form.reset();
+      locationInput.value = "";
+      getLocationBtn.textContent = "📍 تحديد موقعي";
+      getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
+      currentCoords = "";
+    }
   </script>
 </body>
 </html>
