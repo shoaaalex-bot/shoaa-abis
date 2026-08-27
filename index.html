@@ -130,7 +130,7 @@
       <button class="btn btn-outline-danger btn-sm" id="backToClientBtn">إغلاق</button>
     </div>
     <div class="card p-4 text-center">
-      <p class="text-muted fs-5">المنصة متصلة ببوت تيليجرام بنجاح ورقم الإدارة: 01555214562</p>
+      <p class="text-muted fs-5">المنصة متصلة ببوت تيليجرام وترسل للرقمين معاً بنجاح.</p>
     </div>
   </div>
 
@@ -146,9 +146,8 @@
     
     let currentCoords = "";
 
-    // تم وضع بيانات بوت تيليجرام ورقم هاتفك هنا
     const BOT_TOKEN = '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ'; 
-    const CHAT_ID = '01555214562'; 
+    const CHAT_IDS = ['6847899466', '8524443031']; 
 
     const ADMIN_PASSWORD = "abis123";
     let clickCount = 0;
@@ -220,29 +219,31 @@
                           `📍 *اللوكيشن:* ${mapsLink}`;
 
       try {
-        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: CHAT_ID, text: messageText, parse_mode: 'Markdown' })
-        });
+        for (const chatId of CHAT_IDS) {
+          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
+          });
 
-        if (meterFile) {
-          const fm = new FormData();
-          fm.append('chat_id', CHAT_ID);
-          fm.append('photo', meterFile);
-          fm.append('caption', '📷 صورة العداد');
-          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
+          if (meterFile) {
+            const fm = new FormData();
+            fm.append('chat_id', chatId);
+            fm.append('photo', meterFile);
+            fm.append('caption', '📷 صورة العداد');
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
+          }
+
+          if (receiptFile) {
+            const fr = new FormData();
+            fr.append('chat_id', chatId);
+            fr.append('photo', receiptFile);
+            fr.append('caption', '🧾 صورة الإيصال');
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
+          }
         }
 
-        if (receiptFile) {
-          const fr = new FormData();
-          fr.append('chat_id', CHAT_ID);
-          fr.append('photo', receiptFile);
-          fr.append('caption', '🧾 صورة الإيصال');
-          await fetch(`https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
-        }
-
-        alert('تم الإرسال بنجاح!');
+        alert('تم الإرسال بنجاح إلى الرقمين!');
         form.reset();
         locationInput.value = "";
         getLocationBtn.textContent = "📍 تحديد موقعي";
