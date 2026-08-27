@@ -108,8 +108,8 @@
           </div>
 
           <div class="col-md-4">
-            <label class="form-label fw-bold">رقم المشترك</label>
-            <input type="text" id="accNo" class="form-control" placeholder="أدخل رقم المشترك" required>
+            <label class="form-label fw-bold">رقم هاتف المشترك</label>
+            <input type="tel" id="accNo" class="form-control" placeholder="أدخل رقم الهاتف" required>
           </div>
           
           <div class="col-md-4">
@@ -158,7 +158,7 @@
             <tr>
               <th>العداد</th>
               <th>الإيصال</th>
-              <th>المشترك</th>
+              <th>المشترك وهاتفه</th>
               <th>القراءة</th>
               <th>الموقع</th>
               <th>الشكوى</th>
@@ -213,7 +213,7 @@
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
-      const acc = document.getElementById('accNo').value;
+      const phone = document.getElementById('accNo').value;
       const val = document.getElementById('meterVal').value;
       const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
       const meterFile = document.getElementById('meterImgInput').files[0];
@@ -231,17 +231,17 @@
         if (receiptFile) {
           const readerReceipt = new FileReader();
           readerReceipt.onload = function(evtReceipt) {
-            appendRow(meterSrc, evtReceipt.target.result, name, acc, val, currentCoords, complaint);
+            appendRow(meterSrc, evtReceipt.target.result, name, phone, val, currentCoords, complaint);
           };
           readerReceipt.readAsDataURL(receiptFile);
         } else {
-          appendRow(meterSrc, null, name, acc, val, currentCoords, complaint);
+          appendRow(meterSrc, null, name, phone, val, currentCoords, complaint);
         }
       };
       readerMeter.readAsDataURL(meterFile);
     });
 
-    function appendRow(meterSrc, receiptSrc, name, acc, val, coords, complaint) {
+    function appendRow(meterSrc, receiptSrc, name, phone, val, coords, complaint) {
       const receiptCell = receiptSrc ? `<img src="${receiptSrc}" class="meter-img" onclick="window.open('${receiptSrc}')">` : '<span class="text-muted small">بدون</span>';
       const mapsLink = `https://www.google.com/maps?q=${coords}`;
 
@@ -251,7 +251,7 @@
           <td>${receiptCell}</td>
           <td>
             <strong>${name}</strong><br>
-            <small class="text-muted">رقم: ${acc}</small>
+            <small class="text-muted">هاتف: ${phone}</small>
           </td>
           <td>${val} kWh</td>
           <td><a href="${mapsLink}" target="_blank" class="btn btn-sm btn-outline-primary">الخريطة</a></td>
