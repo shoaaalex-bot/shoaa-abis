@@ -18,14 +18,6 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); 
       background-color: #ffffff;
     }
-    .meter-img { 
-      width: 50px; 
-      height: 50px; 
-      object-fit: cover; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      border: 1px solid #cbd5e1;
-    }
     .site-logo { width: 45px; height: 45px; object-fit: contain; }
     .main-logo { width: 110px; height: 110px; object-fit: contain; }
     
@@ -42,11 +34,13 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     }
     
-    /* اللون الذهبي الفاخر للاسم الرئيسي */
+    /* اللون الذهبي الفاخر للاسم الرئيسي مع جعل الشعار قابل للنقر السري */
     .gold-title {
       color: #b8860b !important;
       font-weight: 800;
       text-shadow: 0px 1px 1px rgba(0,0,0,0.05);
+      cursor: pointer;
+      user-select: none;
     }
 
     .form-control, .form-select {
@@ -76,19 +70,19 @@
 <body>
   <nav class="navbar navbar-light bg-white border-bottom shadow-sm">
     <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <!-- النقر السري (3 ضغطات) على اللوجو للاستدعاء السري لوحة التحكم -->
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#" id="secretAdminTrigger">
         <img src="logo.png" alt="شعاع" class="site-logo">
         <span class="gold-title fs-5">شركة شعاع - فرع أبيس</span>
       </a>
-      <button class="btn btn-sm btn-outline-primary px-3 fw-bold" id="toggleView">لوحة التحكم</button>
+      <span class="text-muted small">خدمات المشتركين</span>
     </div>
   </nav>
 
-  <!-- شاشة المشترك بعرض الشاشة بالكامل -->
+  <!-- شاشة المشترك العادية -->
   <div class="container-fluid py-4 px-4" id="clientView">
     <div class="card p-4 p-md-5">
       
-      <!-- النص الترحيبي المظلل بالأزرق والكتابة بالأسود -->
       <div class="welcome-box">
         <strong class="d-block mb-1 fs-5 text-dark">شركة شعاع للخدمات العامة - بالتعاون مع الشركة القابضة للكهرباء</strong>
         <p class="mb-0">نرحب بكم. تأتي هذه المنصة سعياً لتوفير الراحة للمواطنين وخدمتكم في أخذ القراءات في مواعيدها السليمة، حرصاً منا على دقة الاستهلاك وعدم الإضرار بالصالح العام للمواطن.</p>
@@ -141,51 +135,73 @@
           </div>
 
           <div class="col-12 mt-4">
-            <button type="submit" class="btn btn-primary w-100 py-3 shadow-sm fs-5">إرسال القراءة والبيانات</button>
+            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 shadow-sm fs-5">إرسال القراءة والبيانات</button>
           </div>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- لوحة التحكم بعرض الشاشة بالكامل -->
+  <!-- لوحة تحكم الأدمن (مخفية كلياً) -->
   <div class="container-fluid py-4 px-4 d-none" id="adminView">
-    <h3 class="mb-4 text-primary fw-bold">لوحة تحكم فرع أبيس (مراجعة القراءات والشكاوى)</h3>
-    <div class="card p-4">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle" id="readingsTable">
-          <thead>
-            <tr>
-              <th>العداد</th>
-              <th>الإيصال</th>
-              <th>المشترك وهاتفه</th>
-              <th>القراءة</th>
-              <th>الموقع</th>
-              <th>الشكوى</th>
-              <th>الحالة</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="text-primary fw-bold">لوحة تحكم فرع أبيس (خاص بالأدمن)</h3>
+      <button class="btn btn-outline-danger btn-sm" id="backToClientBtn">إغلاق لوحة التحكم</button>
+    </div>
+    <div class="card p-4 text-center">
+      <p class="text-muted fs-5">أهلاً بك يا باشمهندس. المنصة متصلة بنجاح مع بوت تيليجرام.</p>
+      <div class="alert alert-success">جميع بيانات المشتركين (الاسم، الهاتف، القراءة، الصور، ورابط اللوكيشن) تصلك فوراً لحظة بلحظة على تطبيق تيليجرام الخاص بك.</div>
     </div>
   </div>
 
   <script>
-    const toggleBtn = document.getElementById('toggleView');
-    const clientView = document.getElementById('clientView');
-    const adminView = document.getElementById('adminView');
     const form = document.getElementById('readingForm');
-    const tableBody = document.querySelector('#readingsTable tbody');
+    const submitBtn = document.getElementById('submitBtn');
     const getLocationBtn = document.getElementById('getLocationBtn');
     const locationInput = document.getElementById('locationInput');
+    const secretAdminTrigger = document.getElementById('secretAdminTrigger');
+    const backToClientBtn = document.getElementById('backToClientBtn');
+    const clientView = document.getElementById('clientView');
+    const adminView = document.getElementById('adminView');
     
     let currentCoords = "";
 
-    toggleBtn.addEventListener('click', () => {
-      clientView.classList.toggle('d-none');
-      adminView.classList.toggle('d-none');
-      toggleBtn.textContent = clientView.classList.contains('d-none') ? 'شاشة المشترك' : 'لوحة التحكم';
+    // ضع بيانات بوت تيليجرام الخاص بك هنا
+    const BOT_TOKEN = 'YOUR_BOT_TOKEN'; 
+    const CHAT_ID = 'YOUR_CHAT_ID';
+
+    // كلمة المرور الجديدة لوحة التحكم
+    const ADMIN_PASSWORD = "abis123";
+
+    // نظام الضغط السري (3 ضغطات متتالية على اللوجو لفتح لوحة التحكم)
+    let clickCount = 0;
+    let clickTimer = null;
+
+    secretAdminTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      clickCount++;
+      
+      if (clickTimer) clearTimeout(clickTimer);
+      
+      clickTimer = setTimeout(() => {
+        clickCount = 0;
+      }, 600); // خلال أقل من ثانية
+
+      if (clickCount >= 3) {
+        clickCount = 0;
+        const pass = prompt("أدخل كلمة المرور السرية لوحة التحكم:");
+        if (pass === ADMIN_PASSWORD) {
+          clientView.classList.add('d-none');
+          adminView.classList.remove('d-none');
+        } else if (pass !== null) {
+          alert("كلمة المرور غير صحيحة!");
+        }
+      }
+    });
+
+    backToClientBtn.addEventListener('click', () => {
+      adminView.classList.add('d-none');
+      clientView.classList.remove('d-none');
     });
 
     getLocationBtn.addEventListener('click', () => {
@@ -210,8 +226,22 @@
       }
     });
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      if (!currentCoords) {
+        alert('الرجاء تحديد موقع العداد (اللوكيشن) أولاً!');
+        return;
+      }
+
+      if (BOT_TOKEN === 'YOUR_BOT_TOKEN' || CHAT_ID === 'YOUR_CHAT_ID') {
+        alert('برجاء ضبط Bot Token و Chat ID الخاص بك داخل الكود البرمجي أولاً!');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "جاري إرسال البيانات...";
+
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
       const val = document.getElementById('meterVal').value;
@@ -219,54 +249,66 @@
       const meterFile = document.getElementById('meterImgInput').files[0];
       const receiptFile = document.getElementById('receiptImgInput').files[0];
 
-      if (!currentCoords) {
-        alert('الرجاء تحديد موقع العداد (اللوكيشن) أولاً!');
-        return;
-      }
+      const mapsLink = `https://www.google.com/maps?q=${currentCoords}`;
+      
+      const messageText = `⚡ *قراءة جديدة - فرع أبيس*\n\n` +
+                          `👤 *الاسم:* ${name}\n` +
+                          `📞 *الهاتف:* \`${phone}\`\n` +
+                          `🔢 *القراءة:* \`${val} kWh\`\n` +
+                          `⚠️ *الشكوى:* ${complaint}\n` +
+                          `📍 *اللوكيشن:* ${mapsLink}`;
 
-      const readerMeter = new FileReader();
-      readerMeter.onload = function(evtMeter) {
-        const meterSrc = evtMeter.target.result;
-        
-        if (receiptFile) {
-          const readerReceipt = new FileReader();
-          readerReceipt.onload = function(evtReceipt) {
-            appendRow(meterSrc, evtReceipt.target.result, name, phone, val, currentCoords, complaint);
-          };
-          readerReceipt.readAsDataURL(receiptFile);
-        } else {
-          appendRow(meterSrc, null, name, phone, val, currentCoords, complaint);
+      try {
+        // 1. إرسال النص واللوكيشن لتليجرام
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: messageText,
+            parse_mode: 'Markdown'
+          })
+        });
+
+        // 2. إرسال صورة العداد
+        if (meterFile) {
+          const formDataMeter = new FormData();
+          formDataMeter.append('chat_id', CHAT_ID);
+          formDataMeter.append('photo', meterFile);
+          formDataMeter.append('caption', '📷 صورة العداد');
+          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            body: formDataMeter
+          });
         }
-      };
-      readerMeter.readAsDataURL(meterFile);
+
+        // 3. إرسال صورة الإيصال إن وجدت
+        if (receiptFile) {
+          const formDataReceipt = new FormData();
+          formDataReceipt.append('chat_id', CHAT_ID);
+          formDataReceipt.append('photo', receiptFile);
+          formDataReceipt.append('caption', '🧾 صورة الإيصال');
+          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            body: formDataReceipt
+          });
+        }
+
+        alert('تم إرسال بياناتك وقراءة العداد بنجاح إلى الإدارة!');
+        form.reset();
+        locationInput.value = "";
+        getLocationBtn.textContent = "📍 تحديد موقعي";
+        getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
+        currentCoords = "";
+
+      } catch (error) {
+        console.error(error);
+        alert('حدث خطأ أثناء الإرسال، تأكد من اتصال الإنترنت وحاول مرة أخرى.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "إرسال القراءة والبيانات";
+      }
     });
-
-    function appendRow(meterSrc, receiptSrc, name, phone, val, coords, complaint) {
-      const receiptCell = receiptSrc ? `<img src="${receiptSrc}" class="meter-img" onclick="window.open('${receiptSrc}')">` : '<span class="text-muted small">بدون</span>';
-      const mapsLink = `https://www.google.com/maps?q=${coords}`;
-
-      const row = `
-        <tr>
-          <td><img src="${meterSrc}" class="meter-img" onclick="window.open('${meterSrc}')"></td>
-          <td>${receiptCell}</td>
-          <td>
-            <strong>${name}</strong><br>
-            <small class="text-muted">هاتف: ${phone}</small>
-          </td>
-          <td>${val} kWh</td>
-          <td><a href="${mapsLink}" target="_blank" class="btn btn-sm btn-outline-primary">الخريطة</a></td>
-          <td><small class="text-danger">${complaint}</small></td>
-          <td><span class="badge bg-warning text-dark">قيد المراجعة</span></td>
-        </tr>
-      `;
-      tableBody.insertAdjacentHTML('afterbegin', row);
-      alert('تم إرسال بياناتك والشكوى بنجاح!');
-      form.reset();
-      locationInput.value = "";
-      getLocationBtn.textContent = "📍 تحديد موقعي";
-      getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
-      currentCoords = "";
-    }
   </script>
 </body>
 </html>
