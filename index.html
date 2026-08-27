@@ -130,7 +130,7 @@
       <button class="btn btn-outline-danger btn-sm" id="backToClientBtn">إغلاق</button>
     </div>
     <div class="card p-4 text-center">
-      <p class="text-muted fs-5">المنصة متصلة ببوت تيليجرام بنجاح (@Shoaaalex).</p>
+      <p class="text-muted fs-5">المنصة متصلة ببوت تيليجرام بنجاح ورقم الإدارة: 01555214562</p>
     </div>
   </div>
 
@@ -146,9 +146,9 @@
     
     let currentCoords = "";
 
-    // بيانات البوت الخاص بك
-    const BOT_TOKEN = '8385421551:AAFsbNv7bOVPSXmRIadlUyJHtc4iWMZDuFU'; 
-    const CHAT_ID = 'أدخل_رقمك_التعريفي_هنا'; // ضع رقمك الشخصي هنا بعد معرفته من userinfobot
+    // تم وضع بيانات بوت تيليجرام ورقم هاتفك هنا
+    const BOT_TOKEN = '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ'; 
+    const CHAT_ID = '01555214562'; 
 
     const ADMIN_PASSWORD = "abis123";
     let clickCount = 0;
@@ -239,7 +239,7 @@
           fr.append('chat_id', CHAT_ID);
           fr.append('photo', receiptFile);
           fr.append('caption', '🧾 صورة الإيصال');
-          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
+          await fetch(`https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
         }
 
         alert('تم الإرسال بنجاح!');
