@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -10,12 +11,16 @@
     body { background-color: #f4f6f9; font-family: system-ui, -apple-system, sans-serif; }
     .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     .meter-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer; }
+    .site-logo { width: 50px; height: 50px; object-fit: contain; border-radius: 50%; border: 1px solid #dcdcdc; }
   </style>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
-      <a class="navbar-brand text-primary fw-bold" href="#"><i class="bi bi-lightning-charge-fill me-1"></i> شعاع - فرع أبيس</a>
+    <div class="container d-flex justify-content-between align-items-center">
+      <a class="navbar-brand text-primary fw-bold d-flex align-items-center gap-2" href="#">
+        <img src="https://raw.githubusercontent.com/shoaaalex-bot/shoaa-abis/main/logo.png" alt="شعار شعاع" class="site-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2983/2983780.png'">
+        <span>شركة شعاع - فرع أبيس</span>
+      </a>
       <button class="btn btn-sm btn-outline-primary" id="toggleView">لوحة التحكم</button>
     </div>
   </nav>
@@ -23,22 +28,25 @@
   <div class="container py-4" id="clientView">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <div class="card p-4">
-          <h4 class="text-center mb-4 text-primary">تسجيل قراءة العداد</h4>
-          <form id="readingForm">
+        <div class="card p-4 text-center">
+          <img src="https://raw.githubusercontent.com/shoaaalex-bot/shoaa-abis/main/logo.png" alt="شعاع" class="mx-auto mb-3" style="width: 110px; height: 110px; object-fit: contain;" onerror="this.style.display='none'">
+          <h4 class="text-primary mb-1">تسجيل قراءة العداد</h4>
+          <p class="text-muted small mb-4">الشركة القابضة لكهرباء مصر - خدمات القراءة</p>
+          
+          <form id="readingForm" class="text-start">
             <div class="mb-3">
-              <label class="form-label">رقم المشترك</label>
-              <input type="text" id="accNo" class="form-control" placeholder="أدخل رقم المشترك" required>
+              <label class="form-label fw-bold">رقم المشترك</label>
+              <input type="text" id="accNo" class="form-control" placeholder="أدخل رقم المشترك (13 رقم)" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">قراءة العداد الحالية</label>
+              <label class="form-label fw-bold">قراءة العداد الحالية</label>
               <input type="number" id="meterVal" class="form-control" placeholder="أدخل القراءة" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">صورة العداد</label>
+              <label class="form-label fw-bold">صورة العداد</label>
               <input type="file" id="meterImgInput" class="form-control" accept="image/*" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100 py-2">إرسال القراءة</button>
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">إرسال القراءة</button>
           </form>
         </div>
       </div>
@@ -46,7 +54,7 @@
   </div>
 
   <div class="container py-4 d-none" id="adminView">
-    <h4 class="mb-4">لوحة تحكم فرع أبيس (مراجعة القراءات)</h4>
+    <h4 class="mb-4 text-primary">لوحة تحكم فرع أبيس (مراجعة القراءات)</h4>
     <div class="card p-3">
       <div class="table-responsive">
         <table class="table table-hover align-middle" id="readingsTable">
@@ -59,7 +67,6 @@
             </tr>
           </thead>
           <tbody>
-            <!-- تظهر القراءات والصور المرسلة هنا -->
           </tbody>
         </table>
       </div>
