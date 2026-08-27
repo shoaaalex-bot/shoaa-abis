@@ -1,1 +1,260 @@
-const CHAT_ID = 'رقم_الآيدي_الشخصي_هنا';
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة شعاع - فرع أبيس</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body { 
+      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%); 
+      font-family: system-ui, -apple-system, sans-serif; 
+      color: #1e293b;
+      min-height: 100vh;
+    }
+    .card { 
+      border: none; 
+      border-radius: 16px; 
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); 
+      background-color: #ffffff;
+    }
+    .site-logo { width: 45px; height: 45px; object-fit: contain; }
+    .main-logo { width: 110px; height: 110px; object-fit: contain; }
+    .welcome-box { 
+      background-color: #dbeafe; 
+      border-right: 5px solid #2563eb; 
+      border-radius: 12px; 
+      padding: 20px; 
+      margin-bottom: 30px; 
+      font-size: 15px; 
+      line-height: 1.8; 
+      color: #000000;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+    .gold-title {
+      color: #b8860b !important;
+      font-weight: 800;
+      cursor: pointer;
+      user-select: none;
+    }
+    .form-control, .form-select {
+      border-radius: 8px;
+      padding: 12px 16px;
+      border-color: #cbd5e1;
+      background-color: #f8fafc;
+    }
+    .btn-primary {
+      background-color: #2563eb;
+      border-color: #2563eb;
+      border-radius: 8px;
+      padding: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-light bg-white border-bottom shadow-sm">
+    <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#" id="secretAdminTrigger">
+        <img src="logo.png" alt="شعاع" class="site-logo">
+        <span class="gold-title fs-5">شركة شعاع - فرع أبيس</span>
+      </a>
+      <span class="text-muted small">خدمات المشتركين</span>
+    </div>
+  </nav>
+
+  <div class="container-fluid py-4 px-4" id="clientView">
+    <div class="card p-4 p-md-5">
+      <div class="welcome-box">
+        <strong class="d-block mb-1 fs-5 text-dark">شركة شعاع للخدمات العامة - بالتعاون مع الشركة القابضة للكهرباء</strong>
+        <p class="mb-0">نرحب بكم. تأتي هذه المنصة سعياً لتوفير الراحة للمواطنين وخدمتكم في أخذ القراءات في مواعيدها السليمة.</p>
+      </div>
+
+      <div class="text-center mb-4">
+        <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-2">
+        <h3 class="text-primary fw-bold mb-1">تسجيل قراءة العداد</h3>
+        <p class="text-muted small">الشركة القابضة لكهرباء مصر - خدمات القراءة</p>
+      </div>
+      
+      <form id="readingForm">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <label class="form-label fw-bold">اسم المشترك <span class="text-muted fw-normal">(اختياري)</span></label>
+            <input type="text" id="clientName" class="form-control" placeholder="أدخل اسم المشترك">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">رقم هاتف المشترك</label>
+            <input type="tel" id="accNo" class="form-control" placeholder="أدخل رقم الهاتف" required>
+          </div>
+          
+          <div class="col-md-4">
+            <label class="form-label fw-bold">قراءة العداد الحالية</label>
+            <input type="number" id="meterVal" class="form-control" placeholder="أدخل القراءة" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">صورة العداد</label>
+            <input type="file" id="meterImgInput" class="form-control" accept="image/*" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">صورة إيصال الكهرباء</label>
+            <input type="file" id="receiptImgInput" class="form-control" accept="image/*">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">موقع العداد (اللوكيشن)</label>
+            <div class="input-group">
+              <input type="text" id="locationInput" class="form-control" placeholder="اضغط على زر تحديد الموقع" readonly required>
+              <button type="button" class="btn btn-outline-secondary px-4" id="getLocationBtn">📍 تحديد موقعي</button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">الشكاوى أو المقترحات (اختياري)</label>
+            <textarea id="complaintInput" class="form-control" rows="1" placeholder="اكتب شكواك أو مقترحك إن وجد..."></textarea>
+          </div>
+
+          <div class="col-12 mt-4">
+            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 shadow-sm fs-5">إرسال القراءة والبيانات</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="container-fluid py-4 px-4 d-none" id="adminView">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="text-primary fw-bold">لوحة تحكم فرع أبيس</h3>
+      <button class="btn btn-outline-danger btn-sm" id="backToClientBtn">إغلاق</button>
+    </div>
+    <div class="card p-4 text-center">
+      <p class="text-muted fs-5">المنصة متصلة ببوت تيليجرام بنجاح (@Shoaaalex).</p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('readingForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const locationInput = document.getElementById('locationInput');
+    const secretAdminTrigger = document.getElementById('secretAdminTrigger');
+    const backToClientBtn = document.getElementById('backToClientBtn');
+    const clientView = document.getElementById('clientView');
+    const adminView = document.getElementById('adminView');
+    
+    let currentCoords = "";
+
+    // بيانات البوت الخاص بك
+    const BOT_TOKEN = '8385421551:AAFsbNv7bOVPSXmRIadlUyJHtc4iWMZDuFU'; 
+    const CHAT_ID = 'أدخل_رقمك_التعريفي_هنا'; // ضع رقمك الشخصي هنا بعد معرفته من userinfobot
+
+    const ADMIN_PASSWORD = "abis123";
+    let clickCount = 0;
+    let clickTimer = null;
+
+    secretAdminTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      clickCount++;
+      if (clickTimer) clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => { clickCount = 0; }, 600);
+      if (clickCount >= 3) {
+        clickCount = 0;
+        const pass = prompt("كلمة المرور:");
+        if (pass === ADMIN_PASSWORD) {
+          clientView.classList.add('d-none');
+          adminView.classList.remove('d-none');
+        }
+      }
+    });
+
+    backToClientBtn.addEventListener('click', () => {
+      adminView.classList.add('d-none');
+      clientView.classList.remove('d-none');
+    });
+
+    getLocationBtn.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        getLocationBtn.textContent = "جاري التحديد...";
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            currentCoords = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
+            locationInput.value = currentCoords;
+            getLocationBtn.textContent = "📍 تم التحديد";
+            getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
+          },
+          () => {
+            alert('فشل تحديد الموقع.');
+            getLocationBtn.textContent = "📍 تحديد موقعي";
+          }
+        );
+      } else {
+        alert('غير مدعوم.');
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentCoords) {
+        alert('الرجاء تحديد الموقع أولاً!');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "جاري الإرسال...";
+
+      const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
+      const phone = document.getElementById('accNo').value;
+      const val = document.getElementById('meterVal').value;
+      const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
+      const meterFile = document.getElementById('meterImgInput').files[0];
+      const receiptFile = document.getElementById('receiptImgInput').files[0];
+      const mapsLink = `https://www.google.com/maps?q=${currentCoords}`;
+      
+      const messageText = `⚡ *قراءة جديدة - فرع أبيس*\n\n` +
+                          `👤 *الاسم:* ${name}\n` +
+                          `📞 *الهاتف:* \`${phone}\`\n` +
+                          `🔢 *القراءة:* \`${val} kWh\`\n` +
+                          `⚠️ *الشكوى:* ${complaint}\n` +
+                          `📍 *اللوكيشن:* ${mapsLink}`;
+
+      try {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+        });
+
+        if (meterFile) {
+          const fm = new FormData();
+          fm.append('chat_id', CHAT_ID);
+          fm.append('photo', meterFile);
+          fm.append('caption', '📷 صورة العداد');
+          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
+        }
+
+        if (receiptFile) {
+          const fr = new FormData();
+          fr.append('chat_id', CHAT_ID);
+          fr.append('photo', receiptFile);
+          fr.append('caption', '🧾 صورة الإيصال');
+          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
+        }
+
+        alert('تم الإرسال بنجاح!');
+        form.reset();
+        locationInput.value = "";
+        getLocationBtn.textContent = "📍 تحديد موقعي";
+        getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
+        currentCoords = "";
+      } catch (error) {
+        alert('حدث خطأ أثناء الإرسال.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "إرسال القراءة والبيانات";
+      }
+    });
+  </script>
+</body>
+</html>
