@@ -20,7 +20,7 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
     .main-container {
-      max-width: 850px;
+      max-width: 900px;
       margin: auto;
       width: 100%;
     }
@@ -91,6 +91,13 @@
       border: 1.5px solid #cbd5e1;
       font-weight: 600;
     }
+    .stat-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
     footer {
       color: #94a3b8;
       font-size: 13px;
@@ -110,6 +117,7 @@
     </div>
   </nav>
 
+  <!-- واجهة المشترك -->
   <div class="container main-container py-5 px-3" id="clientView">
     <div class="card p-4 p-md-5">
       <div class="welcome-box">
@@ -171,14 +179,51 @@
     </div>
   </div>
 
+  <!-- لوحة تحكم وتقارير الأدمن (المطورة) -->
   <div class="container main-container py-5 px-3 d-none" id="adminView">
-    <div class="card p-4">
+    <div class="card p-4 p-md-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="text-primary fw-bold m-0">لوحة تحكم فرع أبيس</h3>
-        <button class="btn btn-outline-danger btn-sm px-3" id="backToClientBtn">إغلاق</button>
+        <div>
+          <h3 class="text-primary fw-bold m-0">لوحة تقارير فرع أبيس</h3>
+          <p class="text-muted small mb-0">متابعة إحصائيات وقراءات المشتركين الواردة عبر البوت</p>
+        </div>
+        <button class="btn btn-outline-danger btn-sm px-3" id="backToClientBtn">إغلاق اللوحة</button>
       </div>
-      <div class="text-center py-4">
-        <p class="text-muted fs-5 mb-0">المنصة متصلة ببوت تيليجرام وترسل القراءات للرقمين معاً بكفاءة عالية.</p>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="stat-card">
+            <span class="text-muted small d-block mb-1">إجمالي القراءات المسجلة حديثاً</span>
+            <h2 id="totalReadingsCount" class="fw-bold text-primary mb-0">0</h2>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="stat-card">
+            <span class="text-muted small d-block mb-1">حالة اتصال البوت</span>
+            <h5 class="fw-bold text-success mb-0">متصل وجاهز للاستلام ✓</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark m-0">سجل التقارير والرسائل الأخيرة:</h5>
+        <button class="btn btn-outline-primary btn-sm" id="refreshReportsBtn">🔄 تحديث التقارير</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle text-center small">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>تفاصيل القراءة والرسالة الواردة</th>
+            </tr>
+          </thead>
+          <tbody id="reportsTableBody">
+            <tr>
+              <td colspan="2" class="text-muted py-4">جاري جلب التقارير من تيليجرام...</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -196,6 +241,9 @@
     const backToClientBtn = document.getElementById('backToClientBtn');
     const clientView = document.getElementById('clientView');
     const adminView = document.getElementById('adminView');
+    const refreshReportsBtn = document.getElementById('refreshReportsBtn');
+    const reportsTableBody = document.getElementById('reportsTableBody');
+    const totalReadingsCount = document.getElementById('totalReadingsCount');
     
     let currentCoords = "";
 
@@ -206,6 +254,7 @@
     let clickCount = 0;
     let clickTimer = null;
 
+    // تفعيل لوحة التحكم عبر النقر 3 مرات متتالية على اسم الشركة
     secretAdminTrigger.addEventListener('click', (e) => {
       e.preventDefault();
       clickCount++;
@@ -213,10 +262,13 @@
       clickTimer = setTimeout(() => { clickCount = 0; }, 600);
       if (clickCount >= 3) {
         clickCount = 0;
-        const pass = prompt("كلمة المرور:");
+        const pass = prompt("كلمة المرور الإدارية:");
         if (pass === ADMIN_PASSWORD) {
           clientView.classList.add('d-none');
           adminView.classList.remove('d-none');
+          fetchTelegramReports(); // جلب التقارير عند فتح اللوحة
+        } else if (pass !== null) {
+          alert('كلمة المرور غير صحيحة!');
         }
       }
     });
@@ -225,6 +277,52 @@
       adminView.classList.add('d-none');
       clientView.classList.remove('d-none');
     });
+
+    refreshReportsBtn.addEventListener('click', () => {
+      fetchTelegramReports();
+    });
+
+    // دالة جلب وعرض تقارير الأداء مباشرة من بوت تيليجرام
+    async function fetchTelegramReports() {
+      reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">جاري تحديث البيانات...</td></tr>`;
+      try {
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`);
+        const data = await response.json();
+        
+        if (data.ok && data.result) {
+          // استخراج الرسائل النصية المتعلقة بالقراءات
+          const messages = data.result
+            .filter(item => item.message && item.message.text)
+            .map(item => item.message);
+
+          totalReadingsCount.textContent = messages.length;
+
+          if (messages.length === 0) {
+            reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">لا توجد سجلات قراءات حديثة مسجلة في البوت حالياً.</td></tr>`;
+            return;
+          }
+
+          let html = '';
+          messages.reverse().forEach((msg, index) => {
+            let dateStr = new Date(msg.date * 1000).toLocaleString('ar-EG');
+            html += `
+              <tr>
+                <td class="fw-bold">${index + 1}</td>
+                <td class="text-start" style="white-space: pre-line; font-family: monospace; font-size: 13px;">
+                  <div class="text-muted small mb-1">📅 التوقيت: ${dateStr}</div>
+                  ${msg.text}
+                </td>
+              </tr>
+            `;
+          });
+          reportsTableBody.innerHTML = html;
+        } else {
+          reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">تعذر جلب التقارير من السيرفر.</td></tr>`;
+        }
+      } catch (error) {
+        reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">خطأ في الاتصال بالشبكة أو البوت.</td></tr>`;
+      }
+    }
 
     getLocationBtn.addEventListener('click', () => {
       if (navigator.geolocation) {
@@ -301,7 +399,6 @@
           }
         }
 
-        // رسالة نجاح واضحة ومطمئنة للمواطن
         alert('✅ تم إرسال قراءتك وبياناتك بنجاح إلى فرع أبيس. شكراً لتعاونكم معنا لضمان دقة الاستهلاك!');
         form.reset();
         locationInput.value = "";
