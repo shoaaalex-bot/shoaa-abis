@@ -237,7 +237,7 @@
             getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
           },
           () => {
-            alert('فشل تحديد الموقع.');
+            alert('فشل تحديد الموقع. يرجى تفعيل الـ GPS ومحاولة مرة أخرى.');
             getLocationBtn.textContent = "📍 تحديد موقعي";
           }
         );
@@ -249,16 +249,21 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!currentCoords) {
-        alert('الرجاء تحديد الموقع أولاً!');
+        alert('الرجاء تحديد الموقع الجغرافي أولاً!');
+        return;
+      }
+
+      const val = document.getElementById('meterVal').value;
+      if (val <= 0) {
+        alert('يرجى إدخال قيمة قراءة صحيحة.');
         return;
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري الإرسال...";
+      submitBtn.textContent = "جاري إرسال البيانات للفرع...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
-      const val = document.getElementById('meterVal').value;
       const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
       const meterFile = document.getElementById('meterImgInput').files[0];
       const receiptFile = document.getElementById('receiptImgInput').files[0];
@@ -296,14 +301,15 @@
           }
         }
 
-        alert('تم الإرسال بنجاح إلى الرقمين!');
+        // رسالة نجاح واضحة ومطمئنة للمواطن
+        alert('✅ تم إرسال قراءتك وبياناتك بنجاح إلى فرع أبيس. شكراً لتعاونكم معنا لضمان دقة الاستهلاك!');
         form.reset();
         locationInput.value = "";
         getLocationBtn.textContent = "📍 تحديد موقعي";
         getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
         currentCoords = "";
       } catch (error) {
-        alert('حدث خطأ أثناء الإرسال.');
+        alert('حدث خطأ أثناء الإرسال، يرجى التأكد من اتصال الإنترنت والمحاولة مرة أخرى.');
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "إرسال القراءة والبيانات";
