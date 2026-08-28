@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة شعاع - فرع أبيس</title>
+  <title>شركة شعاع للخدمات العامة - قطاع الإسكندرية</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <style>
     body { 
@@ -66,7 +66,7 @@
       background-color: #f8fafc;
       transition: all 0.3s ease;
     }
-    .form-control:focus {
+    .form-control:focus, .form-select:focus {
       border-color: #2563eb;
       box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
       background-color: #fff;
@@ -82,7 +82,7 @@
       transition: all 0.3s ease;
     }
     .btn-primary:hover {
-      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      background: linear-gradient(135deg, #1d4ed8 100%, #1e40af 100%);
       transform: translateY(-1px);
       box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
     }
@@ -111,9 +111,9 @@
     <div class="container-fluid d-flex justify-content-between align-items-center">
       <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#" id="secretAdminTrigger">
         <img src="logo.png" alt="شعاع" class="site-logo">
-        <span class="gold-title fs-5">شركة شعاع - فرع أبيس</span>
+        <span class="gold-title fs-5">شركة شعاع - قطاع الإسكندرية</span>
       </a>
-      <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-semibold">خدمات المشتركين</span>
+      <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-semibold">الخدمات الرقمية</span>
     </div>
   </nav>
 
@@ -121,29 +121,63 @@
   <div class="container main-container py-5 px-3" id="clientView">
     <div class="card p-4 p-md-5">
       <div class="welcome-box">
-        <strong class="d-block mb-1 fs-5 text-dark">شركة شعاع للخدمات العامة - بالتعاون مع الشركة القابضة للكهرباء</strong>
-        <p class="mb-0">نرحب بكم في منصتنا الرسمية. تأتي هذه المنصة سعياً لتوفير الراحة للمواطنين وخدمتكم في أخذ القراءات في مواعيدها السليمة، حرصاً منا على ضمان دقة الاستهلاك وعدم الإضرار بالصالح العام للمواطنين.</p>
+        <strong class="d-block mb-1 fs-5 text-dark">شركة شعاع للخدمات العامة - قطاع الإسكندرية</strong>
+        <p class="mb-0">نرحب بكم في المنصة الرقمية الموحدة لفروع الإسكندرية. يرجى اختيار الفرع التابع له وإدخال بيانات العداد بدقة لضمان سرعة معالجة استهلاكك الشهري.</p>
       </div>
 
       <div class="text-center mb-4">
         <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
-        <h3 class="text-primary fw-bold mb-1">تسجيل قراءة العداد</h3>
-        <p class="text-muted small">يرجى إدخال البيانات بدقة لضمان تسجيل القراءة بنجاح</p>
+        <h3 class="text-primary fw-bold mb-1">تسجيل قراءة العداد الذكية</h3>
+        <p class="text-muted small">اختر الفرع وأدخل البيانات المطلوبة بدقة</p>
       </div>
       
       <form id="readingForm">
         <div class="row g-4">
-          <div class="col-md-4">
+          <!-- خانة اختيار الفرع في أمد البداية (على اليمين فوق اسم المشترك) -->
+          <div class="col-md-6">
+            <label class="form-label">اختر الفرع <span class="text-danger">*</span></label>
+            <select id="branchSelect" class="form-select" required>
+              <option value="" disabled selected>رجاء اختر الفرع التابع له</option>
+              <option value="السيوف (800)">السيوف (800)</option>
+              <option value="النصر (801)">النصر (801)</option>
+              <option value="سيدي بشر (802)">سيدي بشر (802)</option>
+              <option value="الإبراهيمية (803)">الإبراهيمية (803)</option>
+              <option value="سابا باشا (804)">سابا باشا (804)</option>
+              <option value="محرم بك (805)">محرم بك (805)</option>
+              <option value="وسط المدينة (806)">وسط المدينة (806)</option>
+              <option value="الدخيلة (807)">الدخيلة (807)</option>
+              <option value="القباري (808)">القباري (808)</option>
+              <option value="العامرية (809)">العامرية (809)</option>
+              <option value="باكوس (810)">باكوس (810)</option>
+              <option value="الهانوفيل (811)">الهانوفيل (811)</option>
+              <option value="المندرة (812)">المندرة (812)</option>
+              <option value="سموحة (813)">سموحة (813)</option>
+              <option value="البرج الجديد (819)">البرج الجديد (819)</option>
+              <option value="بيانكي (820)">بيانكي (820)</option>
+              <option value="البيطاش (821)">البيطاش (821)</option>
+              <option value="أبو قير (822)">أبو قير (822)</option>
+              <option value="أبيس (823)">أبيس (823)</option>
+              <option value="مرغم (829)">مرغم (829)</option>
+              <option value="اكتوبر (830)">اكتوبر (830)</option>
+              <option value="الساحل (831)">الساحل (831)</option>
+              <option value="الجلاء (832)">الجلاء (832)</option>
+              <option value="الحمام (839)">الحمام (839)</option>
+              <option value="الراس السوداء (841)">الراس السوداء (841)</option>
+              <option value="خورشيد (842)">خورشيد (842)</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
             <label class="form-label">اسم المشترك <span class="text-muted fw-normal">(اختياري)</span></label>
             <input type="text" id="clientName" class="form-control" placeholder="أدخل اسم المشترك">
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-6">
             <label class="form-label">رقم هاتف المشترك <span class="text-danger">*</span></label>
             <input type="tel" id="accNo" class="form-control" placeholder="أدخل رقم الهاتف" required>
           </div>
           
-          <div class="col-md-4">
+          <div class="col-md-6">
             <label class="form-label">قراءة العداد الحالية <span class="text-danger">*</span></label>
             <input type="number" id="meterVal" class="form-control" placeholder="أدخل القراءة" required>
           </div>
@@ -172,20 +206,20 @@
           </div>
 
           <div class="col-12 mt-4">
-            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءة والبيانات</button>
+            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءة للفرع المختار</button>
           </div>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- لوحة تحكم وتقارير الأدمن (المطورة) -->
+  <!-- لوحة تحكم وتقارير الأدمن -->
   <div class="container main-container py-5 px-3 d-none" id="adminView">
     <div class="card p-4 p-md-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h3 class="text-primary fw-bold m-0">لوحة تقارير فرع أبيس</h3>
-          <p class="text-muted small mb-0">متابعة إحصائيات وقراءات المشتركين الواردة عبر البوت</p>
+          <h3 class="text-primary fw-bold m-0">لوحة التقارير المركزية - الإسكندرية</h3>
+          <p class="text-muted small mb-0">متابعة إحصائيات القراءات والرسائل الواردة</p>
         </div>
         <button class="btn btn-outline-danger btn-sm px-3" id="backToClientBtn">إغلاق اللوحة</button>
       </div>
@@ -199,14 +233,14 @@
         </div>
         <div class="col-md-6">
           <div class="stat-card">
-            <span class="text-muted small d-block mb-1">حالة اتصال البوت</span>
+            <span class="text-muted small d-block mb-1">حالة اتصال البوت الموحد</span>
             <h5 class="fw-bold text-success mb-0">متصل وجاهز للاستلام ✓</h5>
           </div>
         </div>
       </div>
 
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold text-dark m-0">سجل التقارير والرسائل الأخيرة:</h5>
+        <h5 class="fw-bold text-dark m-0">سجل التقارير والرسائل الواردة:</h5>
         <button class="btn btn-outline-primary btn-sm" id="refreshReportsBtn">🔄 تحديث التقارير</button>
       </div>
 
@@ -229,7 +263,7 @@
   </div>
 
   <footer>
-    <p class="mb-0">جميع الحقوق محفوظة © الشركة القابضة لكهرباء مصر - فرع أبيس</p>
+    <p class="mb-0">جميع الحقوق محفوظة © الشركة القابضة لكهرباء مصر - قطاع الإسكندرية</p>
   </footer>
 
   <script>
@@ -247,14 +281,14 @@
     
     let currentCoords = "";
 
+    // البوت الموحد لكافة الفروع
     const BOT_TOKEN = '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ'; 
     const CHAT_IDS = ['6847899466', '8524443031']; 
 
-    const ADMIN_PASSWORD = "abis123";
+    const ADMIN_PASSWORD = "alex123";
     let clickCount = 0;
     let clickTimer = null;
 
-    // تفعيل لوحة التحكم عبر النقر 3 مرات متتالية على اسم الشركة
     secretAdminTrigger.addEventListener('click', (e) => {
       e.preventDefault();
       clickCount++;
@@ -262,11 +296,11 @@
       clickTimer = setTimeout(() => { clickCount = 0; }, 600);
       if (clickCount >= 3) {
         clickCount = 0;
-        const pass = prompt("كلمة المرور الإدارية:");
+        const pass = prompt("كلمة المرور الإدارية لقطاع الإسكندرية:");
         if (pass === ADMIN_PASSWORD) {
           clientView.classList.add('d-none');
           adminView.classList.remove('d-none');
-          fetchTelegramReports(); // جلب التقارير عند فتح اللوحة
+          fetchTelegramReports();
         } else if (pass !== null) {
           alert('كلمة المرور غير صحيحة!');
         }
@@ -282,7 +316,6 @@
       fetchTelegramReports();
     });
 
-    // دالة جلب وعرض تقارير الأداء مباشرة من بوت تيليجرام
     async function fetchTelegramReports() {
       reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">جاري تحديث البيانات...</td></tr>`;
       try {
@@ -290,7 +323,6 @@
         const data = await response.json();
         
         if (data.ok && data.result) {
-          // استخراج الرسائل النصية المتعلقة بالقراءات
           const messages = data.result
             .filter(item => item.message && item.message.text)
             .map(item => item.message);
@@ -346,6 +378,13 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      const branchName = document.getElementById('branchSelect').value;
+      if (!branchName) {
+        alert('الرجاء اختيار الفرع التابع له أولاً!');
+        return;
+      }
+
       if (!currentCoords) {
         alert('الرجاء تحديد الموقع الجغرافي أولاً!');
         return;
@@ -367,7 +406,7 @@
       const receiptFile = document.getElementById('receiptImgInput').files[0];
       const mapsLink = `https://www.google.com/maps?q=${currentCoords}`;
       
-      const messageText = `⚡ *قراءة جديدة - فرع أبيس*\n\n` +
+      const messageText = `⚡ *قراءة جديدة - فرع: ${branchName}*\n\n` +
                           `👤 *الاسم:* ${name}\n` +
                           `📞 *الهاتف:* \`${phone}\`\n` +
                           `🔢 *القراءة:* \`${val} kWh\`\n` +
@@ -399,7 +438,7 @@
           }
         }
 
-        alert('✅ تم إرسال قراءتك وبياناتك بنجاح إلى فرع أبيس. شكراً لتعاونكم معنا لضمان دقة الاستهلاك!');
+        alert(`✅ تم إرسال قراءتك وبياناتك بنجاح لـ (${branchName}). شكراً لتعاونكم معنا!`);
         form.reset();
         locationInput.value = "";
         getLocationBtn.textContent = "📍 تحديد موقعي";
@@ -409,7 +448,7 @@
         alert('حدث خطأ أثناء الإرسال، يرجى التأكد من اتصال الإنترنت والمحاولة مرة أخرى.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "إرسال القراءة والبيانات";
+        submitBtn.textContent = "إرسال القراءة للفرع المختار";
       }
     });
   </script>
