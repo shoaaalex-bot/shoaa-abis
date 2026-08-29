@@ -241,8 +241,8 @@
         </div>
         <div class="col-md-6">
           <div class="stat-card">
-            <span class="text-muted small d-block mb-1">حالة اتصال البوت الجديد</span>
-            <h5 class="fw-bold text-success mb-0">متصل وجاهز للاستلام ✓</h5>
+            <span class="text-muted small d-block mb-1">حالة اتصال البوتات</span>
+            <h5 class="fw-bold text-success mb-0">البوتات متصلة وجاهزة ✓</h5>
           </div>
         </div>
       </div>
@@ -262,7 +262,7 @@
           </thead>
           <tbody id="reportsTableBody">
             <tr>
-              <td colspan="2" class="text-muted py-4">جاري جلب التقارير من تيليجرام...</td>
+              <td colspan="2" class="text-muted py-4">جاري جلب التقارير...</td>
             </tr>
           </tbody>
         </table>
@@ -289,9 +289,12 @@
     
     let currentCoords = "";
 
-    // إعدادات البوت الجديد فقط
-    const BOT_TOKEN = '8617388417:AAGlqkNMfP92roTttbIvDsKPoTvt-2wAb7A'; 
-    const CHAT_IDS = ['6847899466']; // ضع معرف الشات الخاص بك هنا لتلقي الرسائل
+    // إعدادات البوتات (البوت القديم + البوت الجديد معاً)
+    const BOT_TOKENS = [
+      '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', // البوت القديم
+      '8617388417:AAGlqkNMfP92roTttbIvDsKPoTvt-2wAb7A'  // البوت الجديد
+    ]; 
+    const CHAT_IDS = ['6847899466', '8524443031']; 
 
     const ADMIN_PASSWORD = "alex123";
     let clickCount = 0;
@@ -327,7 +330,8 @@
     async function fetchTelegramReports() {
       reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">جاري تحديث البيانات...</td></tr>`;
       try {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`);
+        // جلب الرسائل من البوت الأول كمرجع للوحة التقارير
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKENS[0]}/getUpdates`);
         const data = await response.json();
         
         if (data.ok && data.result) {
@@ -338,7 +342,7 @@
           totalReadingsCount.textContent = messages.length;
 
           if (messages.length === 0) {
-            reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">لا توجد سجلات قراءات حديثة مسجلة في البوت حالياً. (تأكد من إرسال رسالة تجريبية للبوت الجديد أولاً)</td></tr>`;
+            reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">لا توجد سجلات قراءات حديثة مسجلة حالياً.</td></tr>`;
             return;
           }
 
@@ -357,7 +361,7 @@
           });
           reportsTableBody.innerHTML = html;
         } else {
-          reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">تعذر جلب التقارير (تأكد من بدء المحادثة مع البوت الجديد /start).</td></tr>`;
+          reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">تعذر جلب التقارير من السيرفر.</td></tr>`;
         }
       } catch (error) {
         reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">خطأ في الاتصال بالشبكة أو البوت.</td></tr>`;
@@ -405,7 +409,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال البيانات للفرع...";
+      submitBtn.textContent = "جاري إرسال البيانات لكافة البوتات الفروع...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
@@ -422,31 +426,34 @@
                           `📍 *اللوكيشن:* ${mapsLink}`;
 
       try {
-        for (const chatId of CHAT_IDS) {
-          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
-          });
+        // إرسال البيانات لكل البوتات المعرفة في القائمة
+        for (const token of BOT_TOKENS) {
+          for (const chatId of CHAT_IDS) {
+            await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
+            });
 
-          if (meterFile) {
-            const fm = new FormData();
-            fm.append('chat_id', chatId);
-            fm.append('photo', meterFile);
-            fm.append('caption', '📷 صورة العداد');
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
-          }
+            if (meterFile) {
+              const fm = new FormData();
+              fm.append('chat_id', chatId);
+              fm.append('photo', meterFile);
+              fm.append('caption', '📷 صورة العداد');
+              await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fm });
+            }
 
-          if (receiptFile) {
-            const fr = new FormData();
-            fr.append('chat_id', chatId);
-            fr.append('photo', receiptFile);
-            fr.append('caption', '🧾 صورة الإيصال');
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
+            if (receiptFile) {
+              const fr = new FormData();
+              fr.append('chat_id', chatId);
+              fr.append('photo', receiptFile);
+              fr.append('caption', '🧾 صورة الإيصال');
+              await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
+            }
           }
         }
 
-        alert(`✅ تم إرسال قراءتك وبياناتك بنجاح لـ (${branchName}). شكراً لتعاونكم معنا!`);
+        alert(`✅ تم إرسال قراءتك وبياناتك بنجاح لـ (${branchName}) عبر البوتات المعتمدة!`);
         form.reset();
         locationInput.value = "";
         getLocationBtn.textContent = "📍 تحديد موقعي";
