@@ -241,7 +241,7 @@
         </div>
         <div class="col-md-6">
           <div class="stat-card">
-            <span class="text-muted small d-block mb-1">حالة اتصال البوت الموحد</span>
+            <span class="text-muted small d-block mb-1">حالة اتصال البوت الجديد</span>
             <h5 class="fw-bold text-success mb-0">متصل وجاهز للاستلام ✓</h5>
           </div>
         </div>
@@ -289,8 +289,9 @@
     
     let currentCoords = "";
 
-    const BOT_TOKEN = '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ'; 
-    const CHAT_IDS = ['6847899466', '8524443031']; 
+    // إعدادات البوت الجديد فقط
+    const BOT_TOKEN = '8617388417:AAGlqkNMfP92roTttbIvDsKPoTvt-2wAb7A'; 
+    const CHAT_IDS = ['6847899466']; // ضع معرف الشات الخاص بك هنا لتلقي الرسائل
 
     const ADMIN_PASSWORD = "alex123";
     let clickCount = 0;
@@ -337,7 +338,7 @@
           totalReadingsCount.textContent = messages.length;
 
           if (messages.length === 0) {
-            reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">لا توجد سجلات قراءات حديثة مسجلة في البوت حالياً.</td></tr>`;
+            reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">لا توجد سجلات قراءات حديثة مسجلة في البوت حالياً. (تأكد من إرسال رسالة تجريبية للبوت الجديد أولاً)</td></tr>`;
             return;
           }
 
@@ -356,7 +357,7 @@
           });
           reportsTableBody.innerHTML = html;
         } else {
-          reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">تعذر جلب التقارير من السيرفر.</td></tr>`;
+          reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">تعذر جلب التقارير (تأكد من بدء المحادثة مع البوت الجديد /start).</td></tr>`;
         }
       } catch (error) {
         reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">خطأ في الاتصال بالشبكة أو البوت.</td></tr>`;
