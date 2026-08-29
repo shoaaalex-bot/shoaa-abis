@@ -286,14 +286,15 @@
     
     let currentCoords = "";
 
-    // إعدادات البوتات (البوت القديم + البوت الجديد معاً)
+    // إعدادات كافة البوتات (تعمل معاً في نفس اللحظة)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', // البوت القديم
-      '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'  // البوت الجديد
+      '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI', // البوت الجديد الأول
+      '8608146763:AAH...' // (أو ضع التوكن الكامل للبوت الثالث هنا إن لم يكن مدمجاً، أو اترك الرموز الصحيحة لتوكن البوت الثالث الذي أرسلته)
     ]; 
 
-    // تم إضافة الـ Chat ID الخاص بك (6847899466) لضمان الاستلام الفوري
-    const CHAT_IDS = ['6847899466']; 
+    // معرف الدردشة الخاص بك للاستلام
+    const CHAT_IDS = ['6847899466', '8608146763']; 
 
     const ADMIN_PASSWORD = "alex123";
     let clickCount = 0;
@@ -329,7 +330,7 @@
     async function fetchTelegramReports() {
       reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">جاري تحديث البيانات...</td></tr>`;
       try {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKENS[1]}/getUpdates`);
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKENS[0]}/getUpdates`);
         const data = await response.json();
         
         if (data.ok && data.result) {
@@ -373,7 +374,7 @@
           (position) => {
             currentCoords = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
             locationInput.value = currentCoords;
-            getLocationBtn.textContent = "📍 تم الدقيق";
+            getLocationBtn.textContent = "📍 تم التحديد";
             getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
           },
           () => {
@@ -451,7 +452,7 @@
           }
         }
 
-        alert(`✅ تم إرسال قراءتك وبياناتك بنجاح لـ (${branchName}) عبر البوتات المعتمدة!`);
+        alert(`✅ تم إرسال قراءتك وبياناتك بنجاح لـ (${branchName}) عبر كافة البوتات!`);
         form.reset();
         locationInput.value = "";
         getLocationBtn.textContent = "📍 تحديد موقعي";
