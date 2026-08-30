@@ -84,6 +84,8 @@
       box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
       background-color: #fff;
     }
+    .auto-field { background-color: #e8f8f5 !important; color: #117a65; font-weight: bold; border: 1.5px dashed #1abc9c !important; }
+    .meter-box { background: #f8fafc; padding: 20px; border: 1.5px solid #e2e8f0; border-radius: 14px; margin-bottom: 20px; position: relative; }
     .btn-primary {
       background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       border: none;
@@ -135,17 +137,17 @@
     <div class="card p-4 p-md-5">
       <div class="welcome-box">
         <strong class="d-block mb-1 fs-5 text-dark">شركة شعاع للخدمات العامة - قطاع الإسكندرية</strong>
-        <p class="mb-0">نرحب بكم في المنصة الرقمية الموحدة لفروع الإسكندرية. يرجى اختيار الفرع التابع له وإدخال بيانات العداد بدقة لضمان سرعة معالجة استهلاكك الشهري.</p>
+        <p class="mb-0">نرحب بالسادة المواطنين في المنصة الرقمية الموحدة لفروع الإسكندرية. يرجى اختيار الفرع التابع له وإدخال بيانات العداد بدقة لضمان سرعة معالجة استهلاكك الشهري.</p>
       </div>
 
       <div class="text-center mb-4">
         <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
         <h1 class="h3 text-primary fw-bold mb-1">تسجيل قراءة العداد الذكية</h1>
-        <p class="text-muted small">اختر الفرع وأدخل البيانات المطلوبة بدقة</p>
+        <p class="text-muted small">اختر الفرع وأدخل البيانات المطلوبة بدقة واستخراج اليومية تلقائياً</p>
       </div>
       
       <form id="readingForm">
-        <div class="row g-4">
+        <div class="row g-4 mb-3">
           <div class="col-md-6">
             <label class="form-label">اختر الفرع <span class="text-danger">*</span></label>
             <select id="branchSelect" class="form-select" required>
@@ -188,23 +190,51 @@
             <label class="form-label">رقم هاتف المشترك <span class="text-danger">*</span></label>
             <input type="tel" id="accNo" class="form-control" placeholder="أدخل رقم الهاتف" required>
           </div>
-          
-          <div class="col-md-6">
-            <label class="form-label">قراءة العداد الحالية <span class="text-danger">*</span></label>
-            <input type="number" id="meterVal" class="form-control" placeholder="أدخل القراءة" required>
-          </div>
 
           <div class="col-md-6">
-            <label class="form-label">صورة العداد <span class="text-danger">*</span></label>
-            <input type="file" id="meterImgInput" class="form-control" accept="image/*" required>
+            <label class="form-label">الشكاوى أو المقترحات <span class="text-muted fw-normal">(اختياري)</span></label>
+            <textarea id="complaintInput" class="form-control" rows="1" placeholder="اكتب شكواك أو مقترحك إن وجد..."></textarea>
           </div>
+        </div>
 
-          <div class="col-md-6">
-            <label class="form-label">صورة إيصال الكهرباء <span class="text-danger">*</span></label>
-            <input type="file" id="receiptImgInput" class="form-control" accept="image/*" required>
+        <!-- حاوية العدادات (تدعم إضافة أكثر من عداد) -->
+        <div id="metersContainer">
+          <div class="meter-box">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">مرجع الحساب (مثال: 43/5/158/24) <span class="text-danger">*</span></label>
+                <input type="text" class="form-control account-ref" placeholder="أدخل مرجع الحساب بالإيصال" required oninput="extractDaily(this)">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">رقم اليومية (تلقائي)</label>
+                <input type="text" class="form-control daily-num auto-field" readonly placeholder="تستخرج تلقائياً من المرجع...">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">رقم العداد <span class="text-danger">*</span></label>
+                <input type="text" class="form-control meter-number" placeholder="أدخل رقم العداد" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">قراءة العداد الحالية <span class="text-danger">*</span></label>
+                <input type="number" class="form-control meter-reading" placeholder="أدخل القراءة بالأرقام" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">صورة العداد <span class="text-danger">*</span></label>
+                <input type="file" class="form-control meter-image" accept="image/*" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">صورة إيصال الكهرباء <span class="text-danger">*</span></label>
+                <input type="file" class="form-control receipt-image" accept="image/*" required>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <div class="col-md-6">
+        <div class="mb-4">
+          <button type="button" class="btn btn-outline-secondary w-100 py-2 fw-bold" onclick="addMeterField()">+ إضافة عداد آخر للمشترك</button>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12">
             <label class="form-label">موقع العداد (اللوكيشن) <span class="text-danger">*</span></label>
             <div class="input-group">
               <input type="text" id="locationInput" class="form-control" placeholder="اضغط تحديد موقعي" readonly required>
@@ -212,13 +242,8 @@
             </div>
           </div>
 
-          <div class="col-md-6">
-            <label class="form-label">الشكاوى أو المقترحات <span class="text-muted fw-normal">(اختياري)</span></label>
-            <textarea id="complaintInput" class="form-control" rows="1" placeholder="اكتب شكواك أو مقترحك إن وجد..."></textarea>
-          </div>
-
           <div class="col-12 mt-4">
-            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءة للفرع المختار</button>
+            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات للبوتات وتوجيه الواتساب</button>
           </div>
         </div>
       </form>
@@ -293,18 +318,98 @@
     
     let currentCoords = "";
 
-    // إعدادات البوتات المحدثة بالكامل
+    // إعدادات البوتات
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
-      '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI', 
-      '8608146763:AAH...' // استبدل النقاط بالتكملة لو أردت تفعيل البوت الثالث بكامل توكنه
+      '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
     ]; 
 
     const CHAT_IDS = ['6847899466', '8608146763']; 
 
+    // أرقام واتساب الفروع (مع تخصيص رقم فرع أبيس 201274837786)
+    const BRANCH_WHATSAPP = {
+      "أبيس (823)": "201274837786",
+      "السيوف (800)": "201000000002",
+      "النصر (801)": "201000000003",
+      "سيدي بشر (802)": "201000000004",
+      "الإبراهيمية (803)": "201000000005",
+      "سابا باشا (804)": "201000000006",
+      "محرم بك (805)": "201000000007",
+      "وسط المدينة (806)": "201000000008",
+      "الدخيلة (807)": "201000000009",
+      "العامرية (809)": "201000000010",
+      "باكوس (810)": "201000000011",
+      "الهانوفيل (811)": "201000000012",
+      "المندرة (812)": "201000000013",
+      "سموحة (813)": "201000000014",
+      "البرج الجديد (819)": "201000000015",
+      "بيانكي (820)": "201000000016",
+      "البيطاش (821)": "201000000017",
+      "أبو قير (822)": "201000000018",
+      "مرغم (829)": "201000000019",
+      "اكتوبر (830)": "201000000020",
+      "الساحل (831)": "201000000021",
+      "الجلاء (832)": "201000000022",
+      "الحمام (839)": "201000000023",
+      "الراس السوداء (841)": "201000000024",
+      "خورشيد (842)": "201000000025"
+    };
+
     const ADMIN_PASSWORD = "alex123";
     let clickCount = 0;
     let clickTimer = null;
+
+    // استخراج اليومية تلقائياً من مرجع الحساب
+    window.extractDaily = function(inputElement) {
+      const box = inputElement.closest('.meter-box');
+      const dailyInput = box.querySelector('.daily-num');
+      const val = inputElement.value.trim();
+      const parts = val.split(/[\/\-\s]+/);
+      if (parts.length >= 2) {
+        dailyInput.value = "يومية " + parts[1];
+      } else {
+        dailyInput.value = "غير محددة";
+      }
+    };
+
+    // إضافة حقول عداد جديد
+    window.addMeterField = function() {
+      const container = document.getElementById('metersContainer');
+      const div = document.createElement('div');
+      div.className = 'meter-box';
+      div.innerHTML = `
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">مرجع الحساب (مثال: 43/5/158/24) <span class="text-danger">*</span></label>
+            <input type="text" class="form-control account-ref" placeholder="أدخل مرجع الحساب بالإيصال" required oninput="extractDaily(this)">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">رقم اليومية (تلقائي)</label>
+            <input type="text" class="form-control daily-num auto-field" readonly placeholder="تستخرج تلقائياً من المرجع...">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">رقم العداد <span class="text-danger">*</span></label>
+            <input type="text" class="form-control meter-number" placeholder="أدخل رقم العداد" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">قراءة العداد الحالية <span class="text-danger">*</span></label>
+            <input type="number" class="form-control meter-reading" placeholder="أدخل القراءة بالأرقام" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">صورة العداد <span class="text-danger">*</span></label>
+            <input type="file" class="form-control meter-image" accept="image/*" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">صورة إيصال الكهرباء <span class="text-danger">*</span></label>
+            <input type="file" class="form-control receipt-image" accept="image/*" required>
+          </div>
+          <div class="col-12 mt-2">
+            <button type="button" class="btn btn-outline-danger btn-sm w-100 fw-bold" onclick="this.closest('.meter-box').remove()">حذف هذا العداد</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+    };
 
     secretAdminTrigger.addEventListener('click', (e) => {
       e.preventDefault();
@@ -407,57 +512,100 @@
         return;
       }
 
-      const val = document.getElementById('meterVal').value;
-      if (val <= 0) {
-        alert('يرجى إدخال قيمة قراءة صحيحة.');
-        return;
-      }
+      const meterBoxes = document.querySelectorAll('.meter-box');
+      let hasError = false;
+
+      // فحص منع التكرار لكل عداد قبل الإرسال
+      const now = new Date();
+      const currentMonth = `${now.getFullYear()}-${now.getMonth() + 1}`;
+      
+      meterBoxes.forEach((box) => {
+        const mNum = box.querySelector('.meter-number').value.trim();
+        const storageKey = `sent_${mNum}_${currentMonth}`;
+        if (localStorage.getItem(storageKey)) {
+          alert(`عذراً، تم تسجيل قراءة العداد رقم (${mNum}) مسبقاً خلال هذا الشهر.`);
+          hasError = true;
+        }
+      });
+
+      if (hasError) return;
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال البيانات لكافة البوتات...";
+      submitBtn.textContent = "جاري إرسال البيانات للبوتات وتوجيه الواتساب...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
       const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
-      const meterFile = document.getElementById('meterImgInput').files[0];
-      const receiptFile = document.getElementById('receiptImgInput').files[0];
       const mapsLink = `https://www.google.com/maps?q=${currentCoords}`;
       
-      const messageText = `⚡ *قراءة جديدة - فرع: ${branchName}*\n\n` +
+      let messageText = `⚡ *قراءة جديدة - فرع: ${branchName}*\n\n` +
                           `👤 *الاسم:* ${name}\n` +
                           `📞 *الهاتف:* \`${phone}\`\n` +
-                          `🔢 *القراءة:* \`${val} kWh\`\n` +
                           `⚠️ *الشكوى:* ${complaint}\n` +
-                          `📍 *اللوكيشن:* ${mapsLink}`;
+                          `📍 *اللوكيشن:* ${mapsLink}\n`;
+
+      let whatsappSummary = `*قراءات جديدة من المنصة الرقمية*%0A- الفرع: ${branchName}%0A- اسم المشترك: ${name}%0A- الهاتف: ${phone}%0A`;
 
       try {
-        for (const token of BOT_TOKENS) {
-          for (const chatId of CHAT_IDS) {
-            await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
-            });
+        let index = 0;
+        for (const box of meterBoxes) {
+          index++;
+          const mRef = box.querySelector('.account-ref').value.trim();
+          const mDaily = box.querySelector('.daily-num').value.trim();
+          const mNum = box.querySelector('.meter-number').value.trim();
+          const mRead = box.querySelector('.meter-reading').value.trim();
+          const meterFile = box.querySelector('.meter-image').files[0];
+          const receiptFile = box.querySelector('.receipt-image').files[0];
 
-            if (meterFile) {
-              const fm = new FormData();
-              fm.append('chat_id', chatId);
-              fm.append('photo', meterFile);
-              fm.append('caption', '📷 صورة العداد');
-              await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fm });
-            }
+          // حفظ العداد بمنع التكرار هذا الشهر
+          localStorage.setItem(`sent_${mNum}_${currentMonth}`, 'true');
 
-            if (receiptFile) {
-              const fr = new FormData();
-              fr.append('chat_id', chatId);
-              fr.append('photo', receiptFile);
-              fr.append('caption', '🧾 صورة الإيصال');
-              await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
+          messageText += `\n--- *[عداد ${index}]* ---\n` +
+                         `🧾 *مرجع الحساب:* \`${mRef}\`\n` +
+                         `📅 *اليومية:* ${mDaily}\n` +
+                         `🔢 *رقم العداد:* \`${mNum}\`\n` +
+                         `📊 *القراءة:* \`${mRead} kWh\`\n`;
+
+          whatsappSummary += `%0A-------------------%0A*[عداد رقم ${index}]*%0A- مرجع الحساب: ${mRef}%0A- اليومية: ${mDaily}%0A- رقم العداد: ${mNum}%0A- القراءة: ${mRead}%0A`;
+
+          // الإرسال للبوتات
+          for (const token of BOT_TOKENS) {
+            for (const chatId of CHAT_IDS) {
+              await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
+              });
+
+              if (meterFile) {
+                const fm = new FormData();
+                fm.append('chat_id', chatId);
+                fm.append('photo', meterFile);
+                fm.append('caption', `📷 صورة العداد (عداد رقم ${index})`);
+                await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fm });
+              }
+
+              if (receiptFile) {
+                const fr = new FormData();
+                fr.append('chat_id', chatId);
+                fr.append('photo', receiptFile);
+                fr.append('caption', `🧾 صورة الإيصال (عداد رقم ${index})`);
+                await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
+              }
             }
           }
         }
 
-        alert(`✅ تم إرسال قراءتك وبياناتك بنجاح لـ (${branchName}) عبر كافة البوتات!`);
+        // توجيه الواتساب لرقم الفرع المحدد
+        const targetPhone = BRANCH_WHATSAPP[branchName];
+        if (targetPhone) {
+          const whatsappUrl = `https://wa.me/${targetPhone}?text=${whatsappSummary}`;
+          window.open(whatsappUrl, '_blank');
+        }
+
+        // رسالة النجاح المخصصة حسب طلبك
+        alert('تم الارسال بنجاح شكرا لاستخدامك منصه شعاع لتسجيل القراءت');
+        
         form.reset();
         locationInput.value = "";
         getLocationBtn.textContent = "📍 تحديد موقعي";
@@ -467,7 +615,7 @@
         alert('حدث خطأ أثناء الإرسال، يرجى التأكد من اتصال الإنترنت والمحاولة مرة أخرى.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "إرسال القراءة للفرع المختار";
+        submitBtn.textContent = "إرسال القراءات للبوتات وتوجيه الواتساب";
       }
     });
   </script>
