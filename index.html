@@ -123,13 +123,13 @@
     <div class="card p-4 p-md-5">
       <div class="welcome-box">
         <strong class="d-block mb-1 fs-5 text-dark">شركة شعاع للخدمات العامة - قطاع الإسكندرية</strong>
-        <p class="mb-0">نرحب بالسادة المواطنين في المنصة الرقمية الموحدة لفروع الإسكندرية. يرجى اختيار الفرع التابع له وإدخال بيانات الإيصال بدقة لضمان سرعة معالجة استهلاكك الشهري.</p>
+        <p class="mb-0">نرحب بالسادة المواطنين في المنصة الرقمية الموحدة لفروع الإسكندرية. يرجى اختيار الفرع التابع له وإدخال بيانات القراءة بدقة لضمان سرعة معالجة استهلاكك الشهري.</p>
       </div>
 
       <div class="text-center mb-4">
         <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
         <h1 class="h3 text-primary fw-bold mb-1">تسجيل قراءة العداد الذكية</h1>
-        <p class="text-muted small">اختر الفرع وأدخل بيانات الإيصال المطلوبة بدقة</p>
+        <p class="text-muted small">اختر الفرع وأدخل بيانات القراءة المطلوبة بدقة</p>
       </div>
       
       <form id="readingForm">
@@ -186,10 +186,6 @@
         <div id="metersContainer">
           <div class="meter-box">
             <div class="row g-3">
-              <div class="col-md-12">
-                <label class="form-label">مرجع الحساب (مثال: 43/5/158/24) <span class="text-danger">*</span></label>
-                <input type="text" class="form-control account-ref" placeholder="أدخل مرجع الحساب بالإيصال" required>
-              </div>
               <div class="col-md-12">
                 <label class="form-label">قراءة العداد الحالية <span class="text-danger">*</span></label>
                 <input type="number" class="form-control meter-reading" placeholder="أدخل القراءة بالأرقام" required>
@@ -313,10 +309,6 @@
       div.innerHTML = `
         <div class="row g-3">
           <div class="col-md-12">
-            <label class="form-label">مرجع الحساب (مثال: 43/5/158/24) <span class="text-danger">*</span></label>
-            <input type="text" class="form-control account-ref" placeholder="أدخل مرجع الحساب بالإيصال" required>
-          </div>
-          <div class="col-md-12">
             <label class="form-label">قراءة العداد الحالية <span class="text-danger">*</span></label>
             <input type="number" class="form-control meter-reading" placeholder="أدخل القراءة بالأرقام" required>
           </div>
@@ -437,23 +429,6 @@
         return;
       }
 
-      const meterBoxes = document.querySelectorAll('.meter-box');
-      let hasError = false;
-
-      const now = new Date();
-      const currentMonth = `${now.getFullYear()}-${now.getMonth() + 1}`;
-      
-      meterBoxes.forEach((box) => {
-        const mRef = box.querySelector('.account-ref').value.trim();
-        const storageKey = `sent_ref_${mRef}_${currentMonth}`;
-        if (localStorage.getItem(storageKey)) {
-          alert(`عذراً، تم تسجيل قراءة مرجع الحساب (${mRef}) مسبقاً خلال هذا الشهر.`);
-          hasError = true;
-        }
-      });
-
-      if (hasError) return;
-
       submitBtn.disabled = true;
       submitBtn.textContent = "جاري إرسال البيانات (برجاء الانتظار)...";
 
@@ -469,21 +444,17 @@
                           `📍 *اللوكيشن:* ${mapsLink}\n`;
 
       try {
+        const meterBoxes = document.querySelectorAll('.meter-box');
         let index = 0;
         for (const box of meterBoxes) {
           index++;
-          const mRef = box.querySelector('.account-ref').value.trim();
           const mRead = box.querySelector('.meter-reading').value.trim();
           const meterFile = box.querySelector('.meter-image').files[0];
           const receiptFile = box.querySelector('.receipt-image').files[0];
 
-          localStorage.setItem(`sent_ref_${mRef}_${currentMonth}`, 'true');
-
           messageText += `\n--- *[عنصر ${index}]* ---\n` +
-                         `🧾 *مرجع الحساب:* \`${mRef}\`\n` +
                          `📊 *القراءة:* \`${mRead} kWh\`\n`;
 
-          // إرسال الصور والنصوص بشكل آمن ومنتظم للبوتات لتجنب الضغط أو انقطاع الاتصال
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -496,7 +467,7 @@
                 const fm = new FormData();
                 fm.append('chat_id', chatId);
                 fm.append('photo', meterFile);
-                fm.append('caption', `📷 صورة العداد (${branchName} - ${mRef})`);
+                fm.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
                 await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fm });
               }
 
@@ -504,7 +475,7 @@
                 const fr = new FormData();
                 fr.append('chat_id', chatId);
                 fr.append('photo', receiptFile);
-                fr.append('caption', `🧾 صورة الإيصال (${branchName} - ${mRef})`);
+                fr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
                 await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
               }
             }
@@ -519,7 +490,6 @@
         getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
         currentCoords = "";
       } catch (error) {
-        // في حال حدوث أي انقطاع مفاجئ بالشبكة، يتم إعلام المشترك بدقة دون الحاجة لإعادة الإرسال العشوائي، مع تنظيف حالة الحظر المؤقت لتلك المحاولة إن لزم
         alert('حدث خطأ في اتصال الإنترنت أثناء رفع الصور. يرجى التحقق من الشبكة والمحاولة مرة أخرى.');
       } finally {
         submitBtn.disabled = false;
