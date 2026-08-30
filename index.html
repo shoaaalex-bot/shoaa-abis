@@ -1,470 +1,196 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة شعاع لتسجيل القراءات قطاع الإسكندرية</title>
-  
-  <meta name="google-site-verification" content="AMtgOjJj6munXN-_MFBOGVbcRPaH0A6Qcb48Gn5s96Y" />
-  <meta name="description" content="منصة شعاع الرقمية الموحدة لتسجيل قراءات عدادات الكهرباء لجميع فروع قطاع الإسكندرية.">
-  <meta name="keywords" content="شعاع, قطاع الإسكندرية, تسجيل قراءات العداد, شركة شعاع للخدمات العامة, عدادات الكهرباء">
-  <meta name="author" content="قطاع الإسكندرية">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <style>
-    body { 
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1e293b 100%); 
-      font-family: system-ui, -apple-system, sans-serif; 
-      color: #1e293b;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .navbar {
-      background: rgba(255, 255, 255, 0.95) !important;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    .main-container {
-      max-width: 900px;
-      margin: auto;
-      width: 100%;
-    }
-    .card { 
-      border: none; 
-      border-radius: 20px; 
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); 
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
-    }
-    .site-logo { width: 45px; height: 45px; object-fit: contain; }
-    .main-logo { width: 100px; height: 100px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
-    
-    .welcome-box { 
-      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-      border-right: 6px solid #2563eb; 
-      border-radius: 14px; 
-      padding: 22px; 
-      margin-bottom: 30px; 
-      font-size: 15px; 
-      line-height: 1.9; 
-      color: #1e3a8a;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.05);
-    }
-    .gold-title {
-      color: #d97706 !important;
-      font-weight: 800;
-      cursor: pointer;
-      user-select: none;
-      letter-spacing: -0.5px;
-      text-shadow: 0 1px 2px rgba(217, 119, 6, 0.15);
-    }
-    .form-label {
-      font-weight: 700;
-      color: #334155;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-    .form-control, .form-select {
-      border-radius: 10px;
-      padding: 12px 16px;
-      border: 1.5px solid #cbd5e1;
-      background-color: #f8fafc;
-      transition: all 0.3s ease;
-    }
-    .form-control:focus, .form-select:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
-      background-color: #fff;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-      border: none;
-      border-radius: 12px;
-      padding: 14px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-      transition: all 0.3s ease;
-    }
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #1d4ed8 100%, #1e40af 100%);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-    }
-    .btn-outline-secondary {
-      border-radius: 10px;
-      border: 1.5px solid #cbd5e1;
-      font-weight: 600;
-    }
-    .stat-card {
-      background: #f8fafc;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 20px;
-      text-align: center;
-    }
-    footer {
-      color: #94a3b8;
-      font-size: 13px;
-      text-align: center;
-      padding: 20px 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تسجيل قراءات العدادات - قطاع الإسكندرية</title>
+    <style>
+        body { font-family: Tahoma, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; direction: rtl; }
+        .container { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        p.welcome { text-align: center; color: #555; font-size: 14px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .auto-field { background-color: #e8f8f5; color: #117a65; font-weight: bold; border: 1px dashed #1abc9c; }
+        .meter-box { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 15px; position: relative; }
+        button { width: 100%; background-color: #27ae60; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        button.secondary { background-color: #2980b9; margin-bottom: 10px; }
+        button.delete-btn { background-color: #c0392b; padding: 6px; font-size: 13px; width: auto; margin-top: 5px; }
+        button:hover { opacity: 0.9; }
+    </style>
 </head>
 <body>
-  <nav class="navbar navbar-light border-bottom px-3 px-md-4">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="#" id="secretAdminTrigger">
-        <img src="logo.png" alt="شعاع" class="site-logo">
-        <span class="gold-title fs-5">شركة شعاع - قطاع الإسكندرية</span>
-      </a>
-      <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-semibold">الخدمات الرقمية</span>
-    </div>
-  </nav>
 
-  <!-- واجهة المشترك -->
-  <div class="container main-container py-5 px-3" id="clientView">
-    <div class="card p-4 p-md-5">
-      <div class="welcome-box">
-        <strong class="d-block mb-1 fs-5 text-dark">شركة شعاع للخدمات العامة - قطاع الإسكندرية</strong>
-        <p class="mb-0">نرحب بكم في المنصة الرقمية الموحدة لفروع الإسكندرية. يرجى اختيار الفرع التابع له وإدخال بيانات العداد بدقة لضمان سرعة معالجة استهلاكك الشهري.</p>
-      </div>
+<div class="container">
+    <h2>شركة شعاع للخدمات العامة - قطاع الإسكندرية</h2>
+    <p class="welcome">نرحب بالسادة المواطنين في منصة تسجيل قراءات عدادات الكهرباء واستخراج اليوميات تلقائياً</p>
 
-      <div class="text-center mb-4">
-        <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
-        <h3 class="text-primary fw-bold mb-1">تسجيل قراءة العداد الذكية</h3>
-        <p class="text-muted small">اختر الفرع وأدخل البيانات المطلوبة بدقة</p>
-      </div>
-      
-      <form id="readingForm">
-        <div class="row g-4">
-          <div class="col-md-6">
-            <label class="form-label">اختر الفرع <span class="text-danger">*</span></label>
-            <select id="branchSelect" class="form-select" required>
-              <option value="" disabled selected>رجاء اختر الفرع التابع له</option>
-              <option value="السيوف (800)">السيوف (800)</option>
-              <option value="النصر (801)">النصر (801)</option>
-              <option value="سيدي بشر (802)">سيدي بشر (802)</option>
-              <option value="الإبراهيمية (803)">الإبراهيمية (803)</option>
-              <option value="سابا باشا (804)">سابا باشا (804)</option>
-              <option value="محرم بك (805)">محرم بك (805)</option>
-              <option value="وسط المدينة (806)">وسط المدينة (806)</option>
-              <option value="الدخيلة (807)">الدخيلة (807)</option>
-              <option value="القباري (808)">القباري (808)</option>
-              <option value="العامرية (809)">العامرية (809)</option>
-              <option value="باكوس (810)">باكوس (810)</option>
-              <option value="الهانوفيل (811)">الهانوفيل (811)</option>
-              <option value="المندرة (812)">المندرة (812)</option>
-              <option value="سموحة (813)">سموحة (813)</option>
-              <option value="البرج الجديد (819)">البرج الجديد (819)</option>
-              <option value="بيانكي (820)">بيانكي (820)</option>
-              <option value="البيطاش (821)">البيطاش (821)</option>
-              <option value="أبو قير (822)">أبو قير (822)</option>
-              <option value="أبيس (823)">أبيس (823)</option>
-              <option value="مرغم (829)">مرغم (829)</option>
-              <option value="اكتوبر (830)">اكتوبر (830)</option>
-              <option value="الساحل (831)">الساحل (831)</option>
-              <option value="الجلاء (832)">الجلاء (832)</option>
-              <option value="الحمام (839)">الحمام (839)</option>
-              <option value="الراس السوداء (841)">الراس السوداء (841)</option>
-              <option value="خورشيد (842)">خورشيد (842)</option>
+    <form id="meterForm">
+        <div class="form-group">
+            <label for="branch">اختر الفرع:</label>
+            <select id="branch" required>
+                <option value="">-- اختر الفرع التابع له --</option>
+                <option value="أبيس">أبيس</option>
+                <option value="السيوف">السيوف</option>
+                <option value="النصر">النصر</option>
+                <option value="سيدي بشر">سيدي بشر</option>
+                <option value="الإبراهيمية">الإبراهيمية</option>
+                <option value="محرم بك">محرم بك</option>
+                <option value="سموحة">سموحة</option>
+                <option value="المندرة">المندرة</option>
+                <option value="الأنفوشي">الأنفوشي</option>
             </select>
-          </div>
+        </div>
 
-          <div class="col-md-6">
-            <label class="form-label">اسم المشترك <span class="text-muted fw-normal">(اختياري)</span></label>
-            <input type="text" id="clientName" class="form-control" placeholder="أدخل اسم المشترك">
-          </div>
+        <div class="form-group">
+            <label for="client_name">اسم المشترك:</label>
+            <input type="text" id="client_name" placeholder="أدخل اسم المشترك الثلاثي" required>
+        </div>
 
-          <div class="col-md-6">
-            <label class="form-label">رقم هاتف المشترك <span class="text-danger">*</span></label>
-            <input type="tel" id="accNo" class="form-control" placeholder="أدخل رقم الهاتف" required>
-          </div>
-          
-          <div class="col-md-6">
-            <label class="form-label">قراءة العداد الحالية <span class="text-danger">*</span></label>
-            <input type="number" id="meterVal" class="form-control" placeholder="أدخل القراءة" required>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">صورة العداد <span class="text-danger">*</span></label>
-            <input type="file" id="meterImgInput" class="form-control" accept="image/*" required>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">صورة إيصال الكهرباء <span class="text-danger">*</span></label>
-            <input type="file" id="receiptImgInput" class="form-control" accept="image/*" required>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">موقع العداد (اللوكيشن) <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <input type="text" id="locationInput" class="form-control" placeholder="اضغط تحديد موقعي" readonly required>
-              <button type="button" class="btn btn-outline-secondary px-3" id="getLocationBtn">📍 تحديد موقعي</button>
+        <!-- حاوية العدادات (تدعم إضافة أكثر من عداد) -->
+        <div id="metersContainer">
+            <div class="meter-box">
+                <div class="form-group">
+                    <label>مرجع الحساب (مثال: 43/5/158/24):</label>
+                    <input type="text" class="account-ref" placeholder="أدخل مرجع الحساب المدون بالإيصال" required oninput="extractDaily(this)">
+                </div>
+                <div class="form-group">
+                    <label>رقم اليومية (تلقائي):</label>
+                    <input type="text" class="daily-num auto-field" readonly placeholder="يتم استخراجها تلقائياً من مرجع الحساب...">
+                </div>
+                <div class="form-group">
+                    <label>رقم العداد:</label>
+                    <input type="text" class="meter-number" placeholder="أدخل رقم العداد" required>
+                </div>
+                <div class="form-group">
+                    <label>القراءة الحالية:</label>
+                    <input type="number" class="meter-reading" placeholder="أدخل القراءة بالأرقام" required>
+                </div>
+                <div class="form-group">
+                    <label>صورة العداد:</label>
+                    <input type="file" class="meter-image" accept="image/*" required>
+                </div>
+                <div class="form-group">
+                    <label>صورة الإيصال:</label>
+                    <input type="file" class="receipt-image" accept="image/*" required>
+                </div>
             </div>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">الشكاوى أو المقترحات <span class="text-muted fw-normal">(اختياري)</span></label>
-            <textarea id="complaintInput" class="form-control" rows="1" placeholder="اكتب شكواك أو مقترحك إن وجد..."></textarea>
-          </div>
-
-          <div class="col-12 mt-4">
-            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءة للفرع المختار</button>
-          </div>
         </div>
-      </form>
-    </div>
-  </div>
 
-  <!-- لوحة تحكم وتقارير الأدمن -->
-  <div class="container main-container py-5 px-3 d-none" id="adminView">
-    <div class="card p-4 p-md-5">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h3 class="text-primary fw-bold m-0">لوحة التقارير المركزية - الإسكندرية</h3>
-          <p class="text-muted small mb-0">متابعة إحصائيات القراءات والرسائل الواردة</p>
+        <button type="button" class="secondary" onclick="addMeterField()">+ إضافة عداد آخر للمشترك</button>
+        <button type="submit">إرسال كافة البيانات عبر واتساب</button>
+    </form>
+</div>
+
+<script>
+// دالة استخراج اليومية تلقائياً من مرجع الحساب (الخانة التي تلي رقم المنطقة)
+function extractDaily(inputElement) {
+    const box = inputElement.closest('.meter-box');
+    const dailyInput = box.querySelector('.daily-num');
+    const val = inputElement.value.trim();
+
+    const parts = val.split(/[\/\-\s]+/);
+    if (parts.length >= 2) {
+        dailyInput.value = "يومية " + parts[1];
+    } else {
+        dailyInput.value = "غير محددة";
+    }
+}
+
+// دالة إضافة خانات عداد جديد
+function addMeterField() {
+    const container = document.getElementById('metersContainer');
+    const div = document.createElement('div');
+    div.className = 'meter-box';
+    div.innerHTML = `
+        <div class="form-group">
+            <label>مرجع الحساب (مثال: 43/5/158/24):</label>
+            <input type="text" class="account-ref" placeholder="أدخل مرجع الحساب المدون بالإيصال" required oninput="extractDaily(this)">
         </div>
-        <button class="btn btn-outline-danger btn-sm px-3" id="backToClientBtn">إغلاق اللوحة</button>
-      </div>
-
-      <div class="row g-3 mb-4">
-        <div class="col-md-6">
-          <div class="stat-card">
-            <span class="text-muted small d-block mb-1">إجمالي القراءات المسجلة حديثاً</span>
-            <h2 id="totalReadingsCount" class="fw-bold text-primary mb-0">0</h2>
-          </div>
+        <div class="form-group">
+            <label>رقم اليومية (تلقائي):</label>
+            <input type="text" class="daily-num auto-field" readonly placeholder="يتم استخراجها تلقائياً...">
         </div>
-        <div class="col-md-6">
-          <div class="stat-card">
-            <span class="text-muted small d-block mb-1">حالة اتصال البوتات</span>
-            <h5 class="fw-bold text-success mb-0">البوتات متصلة وجاهزة ✓</h5>
-          </div>
+        <div class="form-group">
+            <label>رقم العداد:</label>
+            <input type="text" class="meter-number" placeholder="أدخل رقم العداد" required>
         </div>
-      </div>
+        <div class="form-group">
+            <label>القراءة الحالية:</label>
+            <input type="number" class="meter-reading" placeholder="أدخل القراءة بالأرقام" required>
+        </div>
+        <div class="form-group">
+            <label>صورة العداد:</label>
+            <input type="file" class="meter-image" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <label>صورة الإيصال:</label>
+            <input type="file" class="receipt-image" accept="image/*" required>
+        </div>
+        <button type="button" class="delete-btn" onclick="this.parentElement.remove()">حذف هذا العداد</button>
+    `;
+    container.appendChild(div);
+}
 
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold text-dark m-0">سجل التقارير والرسائل الواردة:</h5>
-        <button class="btn btn-outline-primary btn-sm" id="refreshReportsBtn">🔄 تحديث التقارير</button>
-      </div>
-
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle text-center small">
-          <thead class="table-dark">
-            <tr>
-              <th>#</th>
-              <th>تفاصيل القراءة والرسالة الواردة</th>
-            </tr>
-          </thead>
-          <tbody id="reportsTableBody">
-            <tr>
-              <td colspan="2" class="text-muted py-4">جاري جلب التقارير...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <p class="mb-0">جميع الحقوق محفوظة © الشركة القابضة لكهرباء مصر - قطاع الإسكندرية</p>
-  </footer>
-
-  <script>
-    const form = document.getElementById('readingForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const getLocationBtn = document.getElementById('getLocationBtn');
-    const locationInput = document.getElementById('locationInput');
-    const secretAdminTrigger = document.getElementById('secretAdminTrigger');
-    const backToClientBtn = document.getElementById('backToClientBtn');
-    const clientView = document.getElementById('clientView');
-    const adminView = document.getElementById('adminView');
-    const refreshReportsBtn = document.getElementById('refreshReportsBtn');
-    const reportsTableBody = document.getElementById('reportsTableBody');
-    const totalReadingsCount = document.getElementById('totalReadingsCount');
+// معالجة إرسال النموذج والتحقق من التكرار وتوجيه البيانات للواتساب
+document.getElementById('meterForm').addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    let currentCoords = "";
+    const branch = document.getElementById('branch').value;
+    const clientName = document.getElementById('client_name').value.trim();
+    const meterBoxes = document.querySelectorAll('.meter-box');
+    
+    let summary = `*قراءات جديدة من المنصة الرقمية*%0A- الفرع: ${branch}%0A- اسم المشترك: ${clientName}%0A`;
+    let hasError = false;
 
-    // إعدادات كافة البوتات (تعمل معاً في نفس اللحظة)
-    const BOT_TOKENS = [
-      '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', // البوت القديم
-      '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI', // البوت الجديد الأول
-      '8608146763:AAH...' // (أو ضع التوكن الكامل للبوت الثالث هنا إن لم يكن مدمجاً، أو اترك الرموز الصحيحة لتوكن البوت الثالث الذي أرسلته)
-    ]; 
+    meterBoxes.forEach((box, index) => {
+        const mRef = box.querySelector('.account-ref').value.trim();
+        const mDaily = box.querySelector('.daily-num').value.trim();
+        const mNum = box.querySelector('.meter-number').value.trim();
+        const mRead = box.querySelector('.meter-reading').value.trim();
 
-    // معرف الدردشة الخاص بك للاستلام
-    const CHAT_IDS = ['6847899466', '8608146763']; 
+        // فحص منع التكرار خلال الشهر الحالي
+        const now = new Date();
+        const currentMonth = `${now.getFullYear()}-${now.getMonth() + 1}`;
+        const storageKey = `sent_${mNum}_${currentMonth}`;
 
-    const ADMIN_PASSWORD = "alex123";
-    let clickCount = 0;
-    let clickTimer = null;
-
-    secretAdminTrigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => { clickCount = 0; }, 600);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        const pass = prompt("كلمة المرور الإدارية لقطاع الإسكندرية:");
-        if (pass === ADMIN_PASSWORD) {
-          clientView.classList.add('d-none');
-          adminView.classList.remove('d-none');
-          fetchTelegramReports();
-        } else if (pass !== null) {
-          alert('كلمة المرور غير صحيحة!');
-        }
-      }
-    });
-
-    backToClientBtn.addEventListener('click', () => {
-      adminView.classList.add('d-none');
-      clientView.classList.remove('d-none');
-    });
-
-    refreshReportsBtn.addEventListener('click', () => {
-      fetchTelegramReports();
-    });
-
-    async function fetchTelegramReports() {
-      reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">جاري تحديث البيانات...</td></tr>`;
-      try {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKENS[0]}/getUpdates`);
-        const data = await response.json();
-        
-        if (data.ok && data.result) {
-          const messages = data.result
-            .filter(item => item.message && item.message.text)
-            .map(item => item.message);
-
-          totalReadingsCount.textContent = messages.length;
-
-          if (messages.length === 0) {
-            reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">لا توجد سجلات قراءات حديثة مسجلة حالياً.</td></tr>`;
+        if (localStorage.getItem(storageKey)) {
+            alert(`عذراً، تم تسجيل قراءة العداد رقم (${mNum}) مسبقاً خلال هذا الشهر.`);
+            hasError = true;
             return;
-          }
-
-          let html = '';
-          messages.reverse().forEach((msg, index) => {
-            let dateStr = new Date(msg.date * 1000).toLocaleString('ar-EG');
-            html += `
-              <tr>
-                <td class="fw-bold">${index + 1}</td>
-                <td class="text-start" style="white-space: pre-line; font-family: monospace; font-size: 13px;">
-                  <div class="text-muted small mb-1">📅 التوقيت: ${dateStr}</div>
-                  ${msg.text}
-                </td>
-              </tr>
-            `;
-          });
-          reportsTableBody.innerHTML = html;
-        } else {
-          reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">تعذر جلب التقارير من السيرفر.</td></tr>`;
         }
-      } catch (error) {
-        reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-danger py-4">خطأ في الاتصال بالشبكة أو البوت.</td></tr>`;
-      }
+        localStorage.setItem(storageKey, 'true');
+
+        summary += `%0A-------------------%0A*[عداد رقم ${index + 1}]*%0A- مرجع الحساب: ${mRef}%0A- اليومية: ${mDaily}%0A- رقم العداد: ${mNum}%0A- القراءة: ${mRead}%0A`;
+    });
+
+    if (hasError) return;
+
+    // جدول أرقام واتساب الفروع
+    const branchWhatsAppNumbers = {
+        "أبيس": "201274837786", // رقم فرع أبيس الأساسي
+        "السيوف": "201000000002",
+        "النصر": "201000000003",
+        "سيدي بشر": "201000000004",
+        "الإبراهيمية": "201000000005",
+        "محرم بك": "201000000006",
+        "سموحة": "201000000007",
+        "المندرة": "201000000008",
+        "الأنفوشي": "201000000009"
+    };
+
+    const targetPhone = branchWhatsAppNumbers[branch];
+    if (!targetPhone) {
+        alert('يرجى اختيار الفرع بشكل صحيح.');
+        return;
     }
 
-    getLocationBtn.addEventListener('click', () => {
-      if (navigator.geolocation) {
-        getLocationBtn.textContent = "جاري التحديد...";
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            currentCoords = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
-            locationInput.value = currentCoords;
-            getLocationBtn.textContent = "📍 تم التحديد";
-            getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
-          },
-          () => {
-            alert('فشل تحديد الموقع. يرجى تفعيل الـ GPS ومحاولة مرة أخرى.');
-            getLocationBtn.textContent = "📍 تحديد موقعي";
-          }
-        );
-      } else {
-        alert('المتصفح لا يدعم تحديد الموقع.');
-      }
-    });
+    // فتح واتساب وإرسال البيانات
+    const whatsappUrl = `https://wa.me/${targetPhone}?text=${summary}`;
+    window.open(whatsappUrl, '_blank');
+});
+</script>
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const branchName = document.getElementById('branchSelect').value;
-      if (!branchName) {
-        alert('الرجاء اختيار الفرع التابع له أولاً!');
-        return;
-      }
-
-      if (!currentCoords) {
-        alert('الرجاء تحديد الموقع الجغرافي أولاً!');
-        return;
-      }
-
-      const val = document.getElementById('meterVal').value;
-      if (val <= 0) {
-        alert('يرجى إدخال قيمة قراءة صحيحة.');
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال البيانات لكافة البوتات...";
-
-      const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
-      const phone = document.getElementById('accNo').value;
-      const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
-      const meterFile = document.getElementById('meterImgInput').files[0];
-      const receiptFile = document.getElementById('receiptImgInput').files[0];
-      const mapsLink = `https://www.google.com/maps?q=${currentCoords}`;
-      
-      const messageText = `⚡ *قراءة جديدة - فرع: ${branchName}*\n\n` +
-                          `👤 *الاسم:* ${name}\n` +
-                          `📞 *الهاتف:* \`${phone}\`\n` +
-                          `🔢 *القراءة:* \`${val} kWh\`\n` +
-                          `⚠️ *الشكوى:* ${complaint}\n` +
-                          `📍 *اللوكيشن:* ${mapsLink}`;
-
-      try {
-        // إرسال البيانات لكل البوتات ولكل الـ Chat IDs المسجلة
-        for (const token of BOT_TOKENS) {
-          for (const chatId of CHAT_IDS) {
-            await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
-            });
-
-            if (meterFile) {
-              const fm = new FormData();
-              fm.append('chat_id', chatId);
-              fm.append('photo', meterFile);
-              fm.append('caption', '📷 صورة العداد');
-              await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fm });
-            }
-
-            if (receiptFile) {
-              const fr = new FormData();
-              fr.append('chat_id', chatId);
-              fr.append('photo', receiptFile);
-              fr.append('caption', '🧾 صورة الإيصال');
-              await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
-            }
-          }
-        }
-
-        alert(`✅ تم إرسال قراءتك وبياناتك بنجاح لـ (${branchName}) عبر كافة البوتات!`);
-        form.reset();
-        locationInput.value = "";
-        getLocationBtn.textContent = "📍 تحديد موقعي";
-        getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
-        currentCoords = "";
-      } catch (error) {
-        alert('حدث خطأ أثناء الإرسال، يرجى التأكد من اتصال الإنترنت والمحاولة مرة أخرى.');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "إرسال القراءة للفرع المختار";
-      }
-    });
-  </script>
 </body>
 </html>
