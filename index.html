@@ -218,6 +218,16 @@
           <div class="col-12 mt-4">
             <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات للبوتات والفرع</button>
           </div>
+
+          <!-- زر الواتساب اليدوي الذي يظهر بعد الإرسال لتجنب حظر المتصفح -->
+          <div class="col-12">
+            <div id="whatsappAlertBox" class="d-none text-center p-3 bg-light border rounded-3">
+              <p class="mb-2 fw-bold text-success">تم حفظ البيانات وإرسالها للبوتات بنجاح!</p>
+              <a id="directWhatsappLink" href="#" target="_blank" class="btn btn-success w-100 py-2 fw-bold">
+                🟢 اضغط هنا لفتح رسالة الواتساب الخاصة بفرع أبيس الآن
+              </a>
+            </div>
+          </div>
         </div>
       </form>
     </div>
@@ -298,7 +308,7 @@
 
     const CHAT_IDS = ['6847899466', '8608146763']; 
 
-    // تم إضافة رقم فرع أبيس للتجربة
+    // رقم واتساب فرع أبيس للتجربة
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
     };
@@ -494,11 +504,16 @@
 
         alert('تم الارسال بنجاح شكرا لاستخدامك منصه شعاع لتسجيل القراءت');
         
-        // توجيه تفاصيل الفرع المختار إلى رقمه المخصص (إن وجد في القائمة)
+        // إظهار زر الواتساب اليدوي لتجنب حظر المتصفح
         const targetWhatsapp = BRANCH_WHATSAPP[branchName];
         if (targetWhatsapp) {
           const encodedText = encodeURIComponent(whatsappText);
-          window.open(`https://wa.me/${targetWhatsapp}?text=${encodedText}`, '_blank');
+          const whatsappUrl = `https://wa.me/${targetWhatsapp}?text=${encodedText}`;
+          
+          const waBox = document.getElementById('whatsappAlertBox');
+          const waLink = document.getElementById('directWhatsappLink');
+          waLink.href = whatsappUrl;
+          waBox.classList.remove('d-none'); // إظهار الزر الأخضر للمستخدم
         }
 
         form.reset();
