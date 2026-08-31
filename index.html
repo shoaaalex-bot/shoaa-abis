@@ -281,7 +281,7 @@
     const reportsTableBody = document.getElementById('reportsTableBody');
     const totalReadingsCount = document.getElementById('totalReadingsCount');
 
-    // جدول ربط الفروع بالتوكنات و Chat IDs (المنظومة الكاملة المحدثة)
+    // جدول ربط الفروع بالتوكنات و Chat IDs (المنظومة الكاملة)
     const branchMapping = {
         "ابيس": { chatId: "-1003363924237", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
         "ابوقير": { chatId: "-1004478211758", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
@@ -304,12 +304,12 @@
         "مرغم": { chatId: "-1003938688150", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" }
     };
 
-    // البوتات الرئيسية للشركة للمتابعة الشاملة
+    // البوتات الرئيسية للشركة للمتابعة الشاملة (تستقبل بيانات كل الفروع)
     const mainBots = [
-        { name: "البوت الرئيسي 1", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
-        { name: "البوت الرئيسي 2", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        { name: "البوت الرئيسي 3", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        { name: "البوت الرئيسي 4", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA" }
+        { name: "البوت الرئيسي 1", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng", chatId: "-1004478211758" },
+        { name: "البوت الرئيسي 2", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE", chatId: "-1003598093807" },
+        { name: "البوت الرئيسي 3", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI", chatId: "-1003363924237" },
+        { name: "البوت الرئيسي 4", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA", chatId: "-1004326439141" }
     ];
 
     const ADMIN_PASSWORD = "alex123";
@@ -476,14 +476,30 @@
             await fetch(`https://api.telegram.org/bot${mapping.token}/sendPhoto`, { method: 'POST', body: fr });
           }
 
-          // 2. التوجيه لكافة البوتات الرئيسية للمتابعة الشاملة
+          // 2. إرسال بيانات كل الفروع إلى كافة البوتات الرئيسية للمتابعة الشاملة
           for (let bot of mainBots) {
             const mainUrl = `https://api.telegram.org/bot${bot.token}/sendMessage`;
             await fetch(mainUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ chat_id: mapping.chatId, text: `🔔 *[تنبيه نسخة ${bot.name}]*\n${itemMessage}`, parse_mode: 'Markdown' })
+              body: JSON.stringify({ chat_id: bot.chatId, text: `🌐 *[متابعة عامة - ${bot.name}]*\n${itemMessage}`, parse_mode: 'Markdown' })
             });
+
+            if (meterFile) {
+              const fmM = new FormData();
+              fmM.append('chat_id', bot.chatId);
+              fmM.append('photo', meterFile);
+              fmM.append('caption', `📷 صورة العداد (${branchName} - ${bot.name})`);
+              await fetch(`https://api.telegram.org/bot${bot.token}/sendPhoto`, { method: 'POST', body: fmM });
+            }
+
+            if (receiptFile) {
+              const frM = new FormData();
+              frM.append('chat_id', bot.chatId);
+              frM.append('photo', receiptFile);
+              frM.append('caption', `🧾 صورة الإيصال (${branchName} - ${bot.name})`);
+              await fetch(`https://api.telegram.org/bot${bot.token}/sendPhoto`, { method: 'POST', body: frM });
+            }
           }
         }
 
