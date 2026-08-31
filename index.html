@@ -286,7 +286,7 @@
     const reportsTableBody = document.getElementById('reportsTableBody');
     const totalReadingsCount = document.getElementById('totalReadingsCount');
 
-    // خريطة الفروع مرتبة حسب الأكواد الموضحة في الصورة
+    // خريطة الفروع مرتبة حسب الأكواد مع بوت الفرع المخصص له
     const branchMapping = {
         "السيوف (800)": { chatId: "-1004357312950", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
         "النصر (801)": { chatId: "-1004478211758", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
@@ -317,10 +317,14 @@
         "خورشيد (842)": { chatId: "-1004478211758", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" }
     };
 
-    // التوكنات الرئيسية المحددة للإرسال الشامل
+    // التوكنات الرئيسية (التي كانت ترسل لها بيانات الفروع سابقاً) + التوكنات الرئيسية الجديدة
     const mainBots = [
-        { name: "البوت الرئيسي الأول", token: "8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ" },
-        { name: "البوت الرئيسي الثاني", token: "8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI" }
+        { name: "البوت الرئيسي 1 (القديم)", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
+        { name: "البوت الرئيسي 2 (القديم)", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
+        { name: "البوت الرئيسي 3 (القديم)", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
+        { name: "البوت الرئيسي 4 (القديم)", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA" },
+        { name: "البوت الرئيسي الأول (الجديد)", token: "8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ" },
+        { name: "البوت الرئيسي الثاني (الجديد)", token: "8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI" }
     ];
 
     const ADMIN_PASSWORD = "alex123";
@@ -430,7 +434,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال القراءات للبوتات الرئيسية والفروع...";
+      submitBtn.textContent = "جاري إرسال القراءات للبوتات المخصصة والرئيسية...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
@@ -463,7 +467,7 @@
           let itemMessage = messageText + `\n--- *[عنصر القراءة ${index}]* ---\n` +
                                          `🔢 *قراءة العداد:* \`${mRead}\``;
 
-          // 1. الإرسال للبوت المخصص للفرع المحدد
+          // 1. الإرسال لبوت الفرع المخصص حصرياً
           const branchUrl = `https://api.telegram.org/bot${mapping.token}/sendMessage`;
           await fetch(branchUrl, {
             method: 'POST',
@@ -487,7 +491,7 @@
             await fetch(`https://api.telegram.org/bot${mapping.token}/sendPhoto`, { method: 'POST', body: fr });
           }
 
-          // 2. إرسال كافة الفروع إلى التوكنات الرئيسية الجديدة المحددة
+          // 2. إرسال نسخة من كافة بيانات الفروع لكافة البوتات الرئيسية (القديمة والجديدة)
           for (let bot of mainBots) {
             const mainUrl = `https://api.telegram.org/bot${bot.token}/sendMessage`;
             await fetch(mainUrl, {
