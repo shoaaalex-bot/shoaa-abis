@@ -217,12 +217,12 @@
           </div>
 
           <div class="col-12 mt-4">
-            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات</button>
+            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات للبوتات والفرع</button>
           </div>
 
           <div class="col-12">
             <div id="whatsappAlertBox" class="d-none text-center p-3 bg-light border rounded-3">
-              <p class="mb-2 fw-bold text-success">تم حفظ البيانات وإرسالها بنجاح!</p>
+              <p class="mb-2 fw-bold text-success">تم حفظ البيانات وإرسالها للبوتات بنجاح!</p>
               <a id="directWhatsappLink" href="#" target="_blank" class="btn btn-success w-100 py-2 fw-bold">
                 🟢 اضغط هنا لفتح رسالة الواتساب الخاصة بالفرع الآن
               </a>
@@ -301,16 +301,12 @@
     
     let currentCoords = "";
 
-    // البوتات العامة لباقي فروع القطاع
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
     ]; 
-    const CHAT_IDS = ['6847899466', '8608146763']; 
 
-    // إعدادات بوت فرع أبيس ومجموعته المخصصة
-    const ABIS_BOT_TOKEN = '8385421551:AAFsbNv7bOVPSXmRIadlUyJHtc4iWMZDuFU';
-    const ABIS_CHAT_IDS = ['-1004449894410']; // مجموعة فرع أبيس المحددة
+    const CHAT_IDS = ['6847899466', '8608146763']; 
 
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
@@ -448,7 +444,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال القراءات...";
+      submitBtn.textContent = "جاري إرسال القراءات للبوتات...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
@@ -466,69 +462,39 @@
       try {
         const meterBoxes = document.querySelectorAll('.meter-box');
         let index = 0;
-        
         for (const box of meterBoxes) {
           index++;
           const mRead = box.querySelector('.meter-reading').value.trim();
           const meterFile = box.querySelector('.meter-image').files[0];
           const receiptFile = box.querySelector('.receipt-image').files[0];
 
-          let itemMessage = messageText + `\n--- *[عنصر ${index}]* ---\n` +
-                                         `📊 *القراءة:* \`${mRead} kWh\`\n`;
+          messageText += `\n--- *[عنصر ${index}]* ---\n` +
+                         `📊 *القراءة:* \`${mRead} kWh\`\n`;
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // إذا كان الفرع المختار هو "أبيس (823)"، يتم توجيهه حصرياً لمجموعة أبيس المحددة
-          if (branchName === "أبيس (823)") {
-            for (const chatId of ABIS_CHAT_IDS) {
-              await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendMessage`, {
+          for (const token of BOT_TOKENS) {
+            for (const chatId of CHAT_IDS) {
+              await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: itemMessage, parse_mode: 'Markdown' })
+                body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
               });
 
               if (meterFile) {
                 const fm = new FormData();
                 fm.append('chat_id', chatId);
                 fm.append('photo', meterFile);
-                fm.append('caption', `📷 صورة العداد (فرع أبيس - عنصر ${index})`);
-                await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
+                fm.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+                await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fm });
               }
 
               if (receiptFile) {
                 const fr = new FormData();
                 fr.append('chat_id', chatId);
                 fr.append('photo', receiptFile);
-                fr.append('caption', `🧾 صورة الإيصال (فرع أبيس - عنصر ${index})`);
-                await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
-              }
-            }
-          } 
-          // أما لباقي الفروع، فتُرسل للبوتات والجهات العامة كالمعتاد
-          else {
-            for (const token of BOT_TOKENS) {
-              for (const chatId of CHAT_IDS) {
-                await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ chat_id: chatId, text: itemMessage, parse_mode: 'Markdown' })
-                });
-
-                if (meterFile) {
-                  const fm = new FormData();
-                  fm.append('chat_id', chatId);
-                  fm.append('photo', meterFile);
-                  fm.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
-                  await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fm });
-                }
-
-                if (receiptFile) {
-                  const fr = new FormData();
-                  fr.append('chat_id', chatId);
-                  fr.append('photo', receiptFile);
-                  fr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
-                  await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
-                }
+                fr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+                await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
               }
             }
           }
@@ -556,7 +522,7 @@
         alert('حدث خطأ في اتصال الإنترنت أثناء إرسال البيانات. يرجى التحقق من الشبكة والمحاولة مرة أخرى.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "إرسال القراءات";
+        submitBtn.textContent = "إرسال القراءات للبوتات والفرع";
       }
     });
   </script>
