@@ -289,16 +289,96 @@
     const reportsTableBody = document.getElementById('reportsTableBody');
     const totalReadingsCount = document.getElementById('totalReadingsCount');
 
-    // البوتات العامة لكل فروع القطاع (تستقبل جميع الفروع دائماً)
+    // 1. البوتات الرئيسية للقطاع (تستقبل جميع الفروع دائماً)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
     ]; 
     const CHAT_IDS = ['6847899466', '8608146763']; 
 
-    // بوت فرع أبيس ومجموعته المخصصة
-    const ABIS_BOT_TOKEN = '8385421551:AAFsbNv7bOVPSXmRIadlUyJHtc4iWMZDuFU';
-    const ABIS_CHAT_IDS = ['-1004449894410']; 
+    // 2. إعدادات بوتات ومجموعات الفروع المخصصة (محدثة بالكامل بناءً على طلبك)
+    const BRANCH_BOTS = {
+      "السيوف (800)": {
+        token: "8728814456:AAFVy7hRMvGi4tNwPMv61dqS2W8qEaZMkH4",
+        chatId: "-1004357312950"
+      },
+      "سيدي بشر (802)": {
+        token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA",
+        chatId: "-1004326439141"
+      },
+      "الدخيلة (807)": {
+        token: "8820422501:AAEQPb5gwt1THhYqxigCjebwppWJIJ7JTX0",
+        chatId: "-1004445779479"
+      },
+      "القباري (808)": {
+        token: "8820422501:AAEQPb5gwt1THhYqxigCjebwppWJIJ7JTX0",
+        chatId: "-1004445779479"
+      },
+      "العامرية (809)": {
+        token: "8987444032:AAGsjeRhnw4ytWdY8295KefwMKyy8gxpQWQ",
+        chatId: "-1003938688150"
+      },
+      "الهانوفيل (811)": {
+        token: "8985991072:AAHH7Rs9JcQuyzy3YknvY4ErLtx1sx-LeC0",
+        chatId: "-1003997252714"
+      },
+      "المندرة (812)": {
+        token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE",
+        chatId: "-1003598093807"
+      },
+      "البرج الجديد (819)": {
+        token: "8851012795:AAFYQRZ4LGfoNTijDwpHpOg1C4lqSUYYuQg",
+        chatId: "-1003917417643"
+      },
+      "بيانكي (820)": {
+        token: "8738465190:AAHMvkqjJbUiEhDdxfUwe0zV0fN-qWT56mY",
+        chatId: "-1004361499329"
+      },
+      "البيطاش (821)": {
+        token: "8738465190:AAHMvkqjJbUiEhDdxfUwe0zV0fN-qWT56mY",
+        chatId: "-1004361499329"
+      },
+      "أبو قير (822)": {
+        token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng",
+        chatId: "-1004478211758"
+      },
+      "أبيس (823)": {
+        token: "8385421551:AAFsbNv7bOVPSXmRIadlUyJHtc4iWMZDuFU",
+        chatId: "-1004449894410"
+      },
+      "مرغم (829)": {
+        token: "8987444032:AAGsjeRhnw4ytWdY8295KefwMKyy8gxpQWQ",
+        chatId: "-1003938688150"
+      },
+      "البرج القديم (830)": {
+        token: "8851012795:AAFYQRZ4LGfoNTijDwpHpOg1C4lqSUYYuQg",
+        chatId: "-1003917417643"
+      },
+      "الساحل (831)": {
+        token: "8985991072:AAHH7Rs9JcQuyzy3YknvY4ErLtx1sx-LeC0",
+        chatId: "-1003997252714"
+      },
+      "الجلاء (832)": {
+        token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE",
+        chatId: "-1003598093807"
+      },
+      "اكتوبر (833)": {
+        token: "8985991072:AAHH7Rs9JcQuyzy3YknvY4ErLtx1sx-LeC0",
+        chatId: "-1003997252714"
+      },
+      "الحمام (839)": {
+        token: "8851012795:AAFYQRZ4LGfoNTijDwpHpOg1C4lqSUYYuQg",
+        chatId: "-1003917417643"
+      },
+      "الراس السوداء (841)": {
+        token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng",
+        chatId: "-1004478211758"
+      },
+      "خورشيد (842)": {
+        token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI",
+        chatId: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI"
+      }
+    };
 
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
@@ -439,7 +519,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال الدائم لجميع الفروع للبوتات العامة للقطاع
+          // 1. الإرسال للبوتات الرئيسية (تستقبل كل الفروع دائماً)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -466,30 +546,29 @@
             }
           }
 
-          // 2. إذا كان الفرع المختار هو "أبيس (823)"، إرسال نسخة إضافية لمجموعة أبيس المخصصة
-          if (branchName === "أبيس (823)") {
-            for (const chatId of ABIS_CHAT_IDS) {
-              await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: `[تنبيه فرع أبيس]\n` + itemMessage, parse_mode: 'Markdown' })
-              });
+          // 2. الإرسال الخاص لمجموعة الفرع المختار عبر البوت المخصص له
+          const branchConfig = BRANCH_BOTS[branchName];
+          if (branchConfig) {
+            await fetch(`https://api.telegram.org/bot${branchConfig.token}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: branchConfig.chatId, text: `[تنبيه فرع ${branchName}]\n` + itemMessage, parse_mode: 'Markdown' })
+            });
 
-              if (meterFile) {
-                const fm = new FormData();
-                fm.append('chat_id', chatId);
-                fm.append('photo', meterFile);
-                fm.append('caption', `📷 صورة العداد (فرع أبيس - عنصر ${index})`);
-                await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
-              }
+            if (meterFile) {
+              const fm = new FormData();
+              fm.append('chat_id', branchConfig.chatId);
+              fm.append('photo', meterFile);
+              fm.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${branchConfig.token}/sendPhoto`, { method: 'POST', body: fm });
+            }
 
-              if (receiptFile) {
-                const fr = new FormData();
-                fr.append('chat_id', chatId);
-                fr.append('photo', receiptFile);
-                fr.append('caption', `🧾 صورة الإيصال (فرع أبيس - عنصر ${index})`);
-                await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
-              }
+            if (receiptFile) {
+              const fr = new FormData();
+              fr.append('chat_id', branchConfig.chatId);
+              fr.append('photo', receiptFile);
+              fr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${branchConfig.token}/sendPhoto`, { method: 'POST', body: fr });
             }
           }
 
