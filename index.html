@@ -304,12 +304,14 @@
         "مرغم": { chatId: "-1003938688150", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" }
     };
 
-    // البوتات الرئيسية للشركة للمتابعة الشاملة
+    // البوتات الرئيسية للشركة للمتابعة الشاملة (مع إضافة التوكنات الجديدة واستخدام نفس الـ chatId الخاص بالفرع لكل توكن)
     const mainBots = [
         { name: "البوت الرئيسي 1", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
         { name: "البوت الرئيسي 2", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
         { name: "البوت الرئيسي 3", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        { name: "البوت الرئيسي 4", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA" }
+        { name: "البوت الرئيسي 4", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA" },
+        { name: "البوت الإضافي 1", token: "8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ" },
+        { name: "البوت الإضافي 2", token: "8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI" }
     ];
 
     const ADMIN_PASSWORD = "alex123";
@@ -452,7 +454,7 @@
           let itemMessage = messageText + `\n--- *[عنصر القراءة ${index}]* ---\n` +
                                          `🔢 *قراءة العداد:* \`${mRead}\``;
 
-          // 1. الإرسال إلى مجموعة الفرع المخصصة
+          // 1. الإرسال إلى مجموعة الفرع المخصصة الأساسية
           const branchUrl = `https://api.telegram.org/bot${mapping.token}/sendMessage`;
           await fetch(branchUrl, {
             method: 'POST',
@@ -476,7 +478,7 @@
             await fetch(`https://api.telegram.org/bot${mapping.token}/sendPhoto`, { method: 'POST', body: fr });
           }
 
-          // 2. التوجيه لكافة البوتات الرئيسية للمتابعة الشاملة
+          // 2. التوجيه لكافة البوتات الرئيسية والإضافية للمتابعة الشاملة لجميع الفروع
           for (let bot of mainBots) {
             const mainUrl = `https://api.telegram.org/bot${bot.token}/sendMessage`;
             await fetch(mainUrl, {
@@ -484,6 +486,22 @@
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ chat_id: mapping.chatId, text: `🔔 *[تنبيه نسخة ${bot.name}]*\n${itemMessage}`, parse_mode: 'Markdown' })
             });
+
+            if (meterFile) {
+              const fmM = new FormData();
+              fmM.append('chat_id', mapping.chatId);
+              fmM.append('photo', meterFile);
+              fmM.append('caption', `📷 صورة العداد (${branchName} - ${bot.name})`);
+              await fetch(`https://api.telegram.org/bot${bot.token}/sendPhoto`, { method: 'POST', body: fmM });
+            }
+
+            if (receiptFile) {
+              const frM = new FormData();
+              frM.append('chat_id', mapping.chatId);
+              frM.append('photo', receiptFile);
+              frM.append('caption', `🧾 صورة الإيصال (${branchName} - ${bot.name})`);
+              await fetch(`https://api.telegram.org/bot${bot.token}/sendPhoto`, { method: 'POST', body: frM });
+            }
           }
         }
 
