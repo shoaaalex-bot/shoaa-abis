@@ -308,7 +308,7 @@
     ]; 
     const CHAT_IDS = ['6847899466', '8608146763']; 
 
-    // بوت فرع أبيس ومجموعته المخصصة (تستقبل فرع أبيس إضافياً)
+    // بوت فرع أبيس ومجموعته المخصصة
     const ABIS_BOT_TOKEN = '8385421551:AAFsbNv7bOVPSXmRIadlUyJHtc4iWMZDuFU';
     const ABIS_CHAT_IDS = ['-1004449894410']; 
 
@@ -413,23 +413,42 @@
       }
     }
 
+    // دالة تحديد الموقع مع مهلة زمنية (Timeout) لمنع التعليق
     getLocationBtn.addEventListener('click', () => {
       if (navigator.geolocation) {
         getLocationBtn.textContent = "جاري التحديد...";
+        getLocationBtn.disabled = true;
+
+        const options = {
+          enableHighAccuracy: true,
+          timeout: 10000, // مهلة 10 ثوانٍ لمنع التعليق الدائم
+          maximumAge: 0
+        };
+
         navigator.geolocation.getCurrentPosition(
           (position) => {
             currentCoords = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
             locationInput.value = currentCoords;
             getLocationBtn.textContent = "📍 تم تحديد الموقع";
             getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
+            getLocationBtn.disabled = false;
           },
-          () => {
-            alert('فشل تحديد الموقع. يرجى تفعيل الـ GPS ومحاولة مرة أخرى.');
+          (error) => {
+            let errorMsg = "تعذر تحديد الموقع. يرجى التأكد من تفعيل GPS وإذن الموقع للمتصفح.";
+            if (error.code === error.TIMEOUT) {
+              errorMsg = "انتهت مهلة البحث عن الموقع. يرجى المحاولة في مكان مكشوف أو إعادة محاولة الضغط.";
+            } else if (error.code === error.PERMISSION_DENIED) {
+              errorMsg = "تم رفض إذن الوصول للموقع من قبل المتصفح.";
+            }
+            alert(errorMsg);
             getLocationBtn.textContent = "📍 تحديد موقعي";
-          }
+            getLocationBtn.disabled = false;
+            getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
+          },
+          options
         );
       } else {
-        alert('المتصفح لا يدعم تحديد الموقع.');
+        alert('المتصفح الخاص بك لا يدعم خدمة تحديد الموقع.');
       }
     });
 
@@ -478,7 +497,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال الدائم لجميع الفروع إلى البوتات العامة للقطاع
+          // 1. الإرسال الدائم لجميع الفروع للبوتات العامة للقطاع
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -505,7 +524,7 @@
             }
           }
 
-          // 2. إذا كان الفرع المختار هو "أبيس (823)"، يتم إرسال نسخة إضافية لمجموعة أبيس المخصصة
+          // 2. إذا كان الفرع المختار هو "أبيس (823)"، إرسال نسخة إضافية لمجموعة أبيس المخصصة
           if (branchName === "أبيس (823)") {
             for (const chatId of ABIS_CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendMessage`, {
@@ -518,7 +537,7 @@
                 const fm = new FormData();
                 fm.append('chat_id', chatId);
                 fm.append('photo', meterFile);
-                fm.append('caption`, `📷 صورة العداد (فرع أبيس - عنصر ${index})`);
+                fm.append('caption', `📷 صورة العداد (فرع أبيس - عنصر ${index})`);
                 await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
               }
 
