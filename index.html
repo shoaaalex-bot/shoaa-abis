@@ -301,12 +301,18 @@
     
     let currentCoords = "";
 
+    // البوتات الرئيسية (تستقبل كل القراءات كالمعتاد)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
     ]; 
 
     const CHAT_IDS = ['6847899466', '8608146763']; 
+
+    // بوت فرع أبيس المخصص (Token الخاص بفرع أبيس الجديد)
+    const ABIS_BOT_TOKEN = '8385421551:AAFsbNv7bOVPSXmRIadlUyJHtc4iWMZDuFU';
+    // ضع هنا الـ Chat ID الخاص بمشرف أو مجموعة فرع أبيس إذا رغبت، أو اتركه فارغاً لتوجيهه بنفس الـ CHAT_IDS
+    const ABIS_CHAT_IDS = ['6847899466', '8608146763']; 
 
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
@@ -444,7 +450,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال القراءات للبوتات...";
+      submitBtn.textContent = "جاري إرسال القراءات للبوتات والفرع...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
@@ -473,6 +479,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
+          // 1. إرسال البيانات للبوتات الرئيسية المعتادة
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -498,6 +505,34 @@
               }
             }
           }
+
+          // 2. إذا كان الفرع المختار هو "أبيس (823)"، يتم توجيه نسخة خاصة أيضاً لبوت فرع أبيس الجديد حصرياً
+          if (branchName === "أبيس (823)") {
+            for (const chatId of ABIS_CHAT_IDS) {
+              await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: `[خاص بفرع أبيس]\n` + messageText, parse_mode: 'Markdown' })
+              });
+
+              if (meterFile) {
+                const fm = new FormData();
+                fm.append('chat_id', chatId);
+                fm.append('photo', meterFile);
+                fm.append('caption', `📷 صورة العداد (فرع أبيس المخصوص - عنصر ${index})`);
+                await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
+              }
+
+              if (receiptFile) {
+                const fr = new FormData();
+                fr.append('chat_id', chatId);
+                fr.append('photo', receiptFile);
+                fr.append('caption', `🧾 صورة الإيصال (فرع أبيس المخصوص - عنصر ${index})`);
+                await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
+              }
+            }
+          }
+
         }
 
         alert('تم الارسال بنجاح شكرا لاستخدامك منصه شعاع لتسجيل القراءت');
