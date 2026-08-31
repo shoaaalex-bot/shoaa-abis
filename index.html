@@ -129,7 +129,7 @@
       <div class="text-center mb-4">
         <img src="logo.png" alt="شعاع" class="main-logo mx-auto mb-3">
         <h1 class="h3 text-primary fw-bold mb-1">تسجيل قراءة العداد الذكية</h1>
-        <p class="text-muted small">اختر الفرع مرتباً بالكود وأدخل بيانات القراءة المطلوبة</p>
+        <p class="text-muted small">اختر الفرع وأدخل بيانات القراءة المطلوبة بدقة</p>
       </div>
       
       <form id="readingForm">
@@ -137,34 +137,34 @@
           <div class="col-md-6">
             <label class="form-label">اختر الفرع <span class="text-danger">*</span></label>
             <select id="branchSelect" class="form-select" required>
-              <option value="" disabled selected>رجاء اختر الفرع التابع له (مرتباً بالكود)</option>
-              <option value="السيوف (800)">800 - السيوف</option>
-              <option value="النصر (801)">801 - النصر</option>
-              <option value="سيدي بشر (802)">802 - سيدي بشر</option>
-              <option value="الابراهيميه (803)">803 - الابراهيميه</option>
-              <option value="سابا باشا (804)">804 - سابا باشا</option>
-              <option value="محرم بك (805)">805 - محرم بك</option>
-              <option value="وسط (806)">806 - وسط</option>
-              <option value="الدخيلة (807)">807 - الدخيلة</option>
-              <option value="القباري (808)">808 - القباري</option>
-              <option value="العامريه (809)">809 - العامريه</option>
-              <option value="باكوس (810)">810 - باكوس</option>
-              <option value="الهانوفيل (811)">811 - الهانوفيل</option>
-              <option value="المندره (812)">812 - المندره</option>
-              <option value="سموحه (813)">813 - سموحه</option>
-              <option value="برج الجديد (819)">819 - برج الجديد</option>
-              <option value="بيانكي (820)">820 - بيانكي</option>
-              <option value="البيطاش (821)">821 - البيطاش</option>
-              <option value="ابوقير (822)">822 - ابوقير</option>
-              <option value="ابيس (823)">823 - ابيس</option>
-              <option value="مرغم (829)">829 - مرغم</option>
-              <option value="برج القديم (830)">830 - برج القديم</option>
-              <option value="الساحل (831)">831 - الساحل</option>
-              <option value="الجلاء (832)">832 - الجلاء</option>
-              <option value="اكتوبر (833)">833 - اكتوبر</option>
-              <option value="الحمام (839)">839 - الحمام</option>
-              <option value="الراس السودا (841)">841 - الراس السودا</option>
-              <option value="خورشيد (842)">842 - خورشيد</option>
+              <option value="" disabled selected>رجاء اختر الفرع التابع له</option>
+              <option value="السيوف (800)">السيوف (800)</option>
+              <option value="النصر (801)">النصر (801)</option>
+              <option value="سيدي بشر (802)">سيدي بشر (802)</option>
+              <option value="الإبراهيمية (803)">الإبراهيمية (803)</option>
+              <option value="سابا باشا (804)">سابا باشا (804)</option>
+              <option value="محرم بك (805)">محرم بك (805)</option>
+              <option value="وسط المدينة (806)">وسط المدينة (806)</option>
+              <option value="الدخيلة (807)">الدخيلة (807)</option>
+              <option value="القباري (808)">القباري (808)</option>
+              <option value="العامرية (809)">العامرية (809)</option>
+              <option value="باكوس (810)">باكوس (810)</option>
+              <option value="الهانوفيل (811)">الهانوفيل (811)</option>
+              <option value="المندرة (812)">المندرة (812)</option>
+              <option value="سموحة (813)">سموحة (813)</option>
+              <option value="البرج الجديد (819)">البرج الجديد (819)</option>
+              <option value="بيانكي (820)">بيانكي (820)</option>
+              <option value="البيطاش (821)">البيطاش (821)</option>
+              <option value="أبو قير (822)">أبو قير (822)</option>
+              <option value="أبيس (823)">أبيس (823)</option>
+              <option value="مرغم (829)">مرغم (829)</option>
+              <option value="البرج القديم (830)">البرج القديم (830)</option>
+              <option value="الساحل (831)">الساحل (831)</option>
+              <option value="الجلاء (832)">الجلاء (832)</option>
+              <option value="اكتوبر (833)">اكتوبر (833)</option>
+              <option value="الحمام (839)">الحمام (839)</option>
+              <option value="الراس السوداء (841)">الراس السوداء (841)</option>
+              <option value="خورشيد (842)">خورشيد (842)</option>
             </select>
           </div>
 
@@ -208,13 +208,24 @@
         </div>
 
         <div class="row g-4">
-          <div class="col-12 mt-2">
-            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات للبوتات</button>
+          <div class="col-12">
+            <label class="form-label">موقع العداد (اللوكيشن) <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="text" id="locationInput" class="form-control" placeholder="اضغط تحديد موقعي" readonly required>
+              <button type="button" class="btn btn-outline-secondary px-3" id="getLocationBtn">📍 تحديد موقعي</button>
+            </div>
+          </div>
+
+          <div class="col-12 mt-4">
+            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات</button>
           </div>
 
           <div class="col-12">
             <div id="whatsappAlertBox" class="d-none text-center p-3 bg-light border rounded-3">
-              <p class="mb-2 fw-bold text-success">تم حفظ البيانات وإرسالها للبوتات بنجاح!</p>
+              <p class="mb-2 fw-bold text-success">تم حفظ البيانات وإرسالها بنجاح!</p>
+              <a id="directWhatsappLink" href="#" target="_blank" class="btn btn-success w-100 py-2 fw-bold">
+                🟢 اضغط هنا لفتح رسالة الواتساب الخاصة بالفرع الآن
+              </a>
             </div>
           </div>
         </div>
@@ -278,6 +289,8 @@
   <script>
     const form = document.getElementById('readingForm');
     const submitBtn = document.getElementById('submitBtn');
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const locationInput = document.getElementById('locationInput');
     const secretAdminTrigger = document.getElementById('secretAdminTrigger');
     const backToClientBtn = document.getElementById('backToClientBtn');
     const clientView = document.getElementById('clientView');
@@ -285,43 +298,23 @@
     const refreshReportsBtn = document.getElementById('refreshReportsBtn');
     const reportsTableBody = document.getElementById('reportsTableBody');
     const totalReadingsCount = document.getElementById('totalReadingsCount');
+    
+    let currentCoords = "";
 
-    // خريطة الفروع مرتبة حسب الأكواد مع بوت الفرع المخصص له
-    const branchMapping = {
-        "السيوف (800)": { chatId: "-1004357312950", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
-        "النصر (801)": { chatId: "-1004478211758", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
-        "سيدي بشر (802)": { chatId: "-1004326439141", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA" },
-        "الابراهيميه (803)": { chatId: "-1003363924237", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        "سابا باشا (804)": { chatId: "-1003598093807", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "محرم بك (805)": { chatId: "-1003997252714", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "وسط (806)": { chatId: "-1003917417643", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        "الدخيلة (807)": { chatId: "-1004445779479", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
-        "القباري (808)": { chatId: "-1004445779479", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
-        "العامريه (809)": { chatId: "-1003938688150", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "باكوس (810)": { chatId: "-1004361499329", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA" },
-        "الهانوفيل (811)": { chatId: "-1003997252714", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "المندره (812)": { chatId: "-1003598093807", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "سموحه (813)": { chatId: "-1003363924237", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        "برج الجديد (819)": { chatId: "-1003917417643", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        "بيانكي (820)": { chatId: "-1004361499329", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA" },
-        "البيطاش (821)": { chatId: "-1004361499329", token: "8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA" },
-        "ابوقير (822)": { chatId: "-1004478211758", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
-        "ابيس (823)": { chatId: "-1003363924237", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        "مرغم (829)": { chatId: "-1003938688150", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "برج القديم (830)": { chatId: "-1003917417643", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        "الساحل (831)": { chatId: "-1003997252714", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "الجلاء (832)": { chatId: "-1003598093807", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "اكتوبر (833)": { chatId: "-1003997252714", token: "8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE" },
-        "الحمام (839)": { chatId: "-1003917417643", token: "8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI" },
-        "الراس السودا (841)": { chatId: "-1004478211758", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" },
-        "خورشيد (842)": { chatId: "-1004478211758", token: "8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng" }
+    // البوتات العامة لباقي فروع القطاع
+    const BOT_TOKENS = [
+      '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
+      '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
+    ]; 
+    const CHAT_IDS = ['6847899466', '8608146763']; 
+
+    // إعدادات بوت فرع أبيس ومجموعته المخصصة
+    const ABIS_BOT_TOKEN = '8385421551:AAFsbNv7bOVPSXmRIadlUyJHtc4iWMZDuFU';
+    const ABIS_CHAT_IDS = ['-1004449894410']; // مجموعة فرع أبيس المحددة
+
+    const BRANCH_WHATSAPP = {
+      "أبيس (823)": "201274837786"
     };
-
-    // البوتات الرئيسية (مثل @ShoaaAbisBot وغيرها) التي تستقبل رسائل مباشرة بدون chat_id للجروبات الفرعية
-    const mainBots = [
-        { name: "البوت الرئيسي (@ShoaaAbisBot)", token: "8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ" },
-        { name: "البوت الرئيسي الثاني", token: "8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI" }
-    ];
 
     const ADMIN_PASSWORD = "alex123";
     let clickCount = 0;
@@ -383,7 +376,7 @@
     async function fetchTelegramReports() {
       reportsTableBody.innerHTML = `<tr><td colspan="2" class="text-muted py-4">جاري تحديث البيانات...</td></tr>`;
       try {
-        const response = await fetch(`https://api.telegram.org/bot${mainBots[0].token}/getUpdates`);
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKENS[0]}/getUpdates`);
         const data = await response.json();
         
         if (data.ok && data.result) {
@@ -420,6 +413,26 @@
       }
     }
 
+    getLocationBtn.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        getLocationBtn.textContent = "جاري التحديد...";
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            currentCoords = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
+            locationInput.value = currentCoords;
+            getLocationBtn.textContent = "📍 تم تحديد الموقع";
+            getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
+          },
+          () => {
+            alert('فشل تحديد الموقع. يرجى تفعيل الـ GPS ومحاولة مرة أخرى.');
+            getLocationBtn.textContent = "📍 تحديد موقعي";
+          }
+        );
+      } else {
+        alert('المتصفح لا يدعم تحديد الموقع.');
+      }
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -429,116 +442,121 @@
         return;
       }
 
+      if (!currentCoords) {
+        alert('الرجاء تحديد الموقع الجغرافي أولاً!');
+        return;
+      }
+
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال القراءات للبوتات المخصصة والرئيسية...";
+      submitBtn.textContent = "جاري إرسال القراءات...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
       const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
+      const mapsLink = `https://www.google.com/maps?q=${currentCoords}`;
       
-      let messageText = `⚡ *تسجيل قراءة عداد جديدة*\n\n` +
-                          `🏢 *الفرع:* ${branchName}\n` +
-                          `👤 *اسم المشترك:* ${name}\n` +
-                          `📱 *رقم الهاتف:* \`${phone}\`\n` +
-                          `⚠️ *الشكوى:* ${complaint}\n`;
+      let messageText = `⚡ *قراءة جديدة - فرع: ${branchName}*\n\n` +
+                          `👤 *الاسم:* ${name}\n` +
+                          `📞 *الهاتف:* \`${phone}\`\n` +
+                          `⚠️ *الشكوى:* ${complaint}\n` +
+                          `📍 *اللوكيشن:* ${mapsLink}\n`;
+
+      let whatsappText = `قراءة جديدة - فرع: ${branchName}\nالاسم: ${name}\nالهاتف: ${phone}\nالشكوى: ${complaint}\nاللوكيشن: ${mapsLink}`;
 
       try {
         const meterBoxes = document.querySelectorAll('.meter-box');
         let index = 0;
         
-        const mapping = branchMapping[branchName];
-        if (!mapping) {
-          alert('بيانات الفرع غير متوفرة في جدول الإرسال!');
-          submitBtn.disabled = false;
-          submitBtn.textContent = "إرسال القراءات للبوتات";
-          return;
-        }
-
         for (const box of meterBoxes) {
           index++;
           const mRead = box.querySelector('.meter-reading').value.trim();
           const meterFile = box.querySelector('.meter-image').files[0];
           const receiptFile = box.querySelector('.receipt-image').files[0];
 
-          let itemMessage = messageText + `\n--- *[عنصر القراءة ${index}]* ---\n` +
-                                         `🔢 *قراءة العداد:* \`${mRead}\``;
+          let itemMessage = messageText + `\n--- *[عنصر ${index}]* ---\n` +
+                                         `📊 *القراءة:* \`${mRead} kWh\`\n`;
 
-          // 1. الإرسال لبوت وجروب الفرع المخصص
-          const branchUrl = `https://api.telegram.org/bot${mapping.token}/sendMessage`;
-          await fetch(branchUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: mapping.chatId, text: itemMessage, parse_mode: 'Markdown' })
-          });
+          whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          if (meterFile) {
-            const fm = new FormData();
-            fm.append('chat_id', mapping.chatId);
-            fm.append('photo', meterFile);
-            fm.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
-            await fetch(`https://api.telegram.org/bot${mapping.token}/sendPhoto`, { method: 'POST', body: fm });
-          }
+          // إذا كان الفرع المختار هو "أبيس (823)"، يتم توجيهه حصرياً لمجموعة أبيس المحددة
+          if (branchName === "أبيس (823)") {
+            for (const chatId of ABIS_CHAT_IDS) {
+              await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: itemMessage, parse_mode: 'Markdown' })
+              });
 
-          if (receiptFile) {
-            const fr = new FormData();
-            fr.append('chat_id', mapping.chatId);
-            fr.append('photo', receiptFile);
-            fr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
-            await fetch(`https://api.telegram.org/bot${mapping.token}/sendPhoto`, { method: 'POST', body: fr });
-          }
+              if (meterFile) {
+                const fm = new FormData();
+                fm.append('chat_id', chatId);
+                fm.append('photo', meterFile);
+                fm.append('caption', `📷 صورة العداد (فرع أبيس - عنصر ${index})`);
+                await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fm });
+              }
 
-          // 2. إرسال نسخة من البيانات والصور للبوتات الرئيسية (مباشرة للشات الخاص بالبوت أو بالـ chat_id الخاص بها)
-          for (let bot of mainBots) {
-            // جلب التحديثات أو إرسال الرسالة بدون قصرها على chat_id الفرع الخاطئ
-            const mainUrl = `https://api.telegram.org/bot${bot.token}/getUpdates`;
-            let targetChatId = mapping.chatId; // افتراضي
-            
-            try {
-              const resUpdates = await fetch(mainUrl);
-              const dataUpdates = await resUpdates.json();
-              if (dataUpdates.ok && dataUpdates.result.length > 0) {
-                // البحث عن أول شات شخصي أو محادثة مفعلة مع البوت الرئيسي
-                const validUpdate = dataUpdates.result.find(u => u.message && u.message.chat);
-                if (validUpdate) {
-                  targetChatId = validUpdate.message.chat.id;
+              if (receiptFile) {
+                const fr = new FormData();
+                fr.append('chat_id', chatId);
+                fr.append('photo', receiptFile);
+                fr.append('caption', `🧾 صورة الإيصال (فرع أبيس - عنصر ${index})`);
+                await fetch(`https://api.telegram.org/bot${ABIS_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fr });
+              }
+            }
+          } 
+          // أما لباقي الفروع، فتُرسل للبوتات والجهات العامة كالمعتاد
+          else {
+            for (const token of BOT_TOKENS) {
+              for (const chatId of CHAT_IDS) {
+                await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ chat_id: chatId, text: itemMessage, parse_mode: 'Markdown' })
+                });
+
+                if (meterFile) {
+                  const fm = new FormData();
+                  fm.append('chat_id', chatId);
+                  fm.append('photo', meterFile);
+                  fm.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+                  await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fm });
+                }
+
+                if (receiptFile) {
+                  const fr = new FormData();
+                  fr.append('chat_id', chatId);
+                  fr.append('photo', receiptFile);
+                  fr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+                  await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
                 }
               }
-            } catch (err) {
-              // استخدام الـ chatid الافتراضي إذا حدث استثناء
-            }
-
-            const sendMainUrl = `https://api.telegram.org/bot${bot.token}/sendMessage`;
-            await fetch(sendMainUrl, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ chat_id: targetChatId, text: `🌐 *[أرشيف قطاع الإسكندرية الشامل - ${bot.name}]*\n${itemMessage}`, parse_mode: 'Markdown' })
-            });
-
-            if (meterFile) {
-              const fmM = new FormData();
-              fmM.append('chat_id', targetChatId);
-              fmM.append('photo', meterFile);
-              fmM.append('caption', `📷 صورة العداد (${branchName} - ${bot.name})`);
-              await fetch(`https://api.telegram.org/bot${bot.token}/sendPhoto`, { method: 'POST', body: fmM });
-            }
-
-            if (receiptFile) {
-              const frM = new FormData();
-              frM.append('chat_id', targetChatId);
-              frM.append('photo', receiptFile);
-              frM.append('caption', `🧾 صورة الإيصال (${branchName} - ${bot.name})`);
-              await fetch(`https://api.telegram.org/bot${bot.token}/sendPhoto`, { method: 'POST', body: frM });
             }
           }
         }
 
         alert('تم الارسال بنجاح شكرا لاستخدامك منصه شعاع لتسجيل القراءت');
+        
+        const targetWhatsapp = BRANCH_WHATSAPP[branchName];
+        if (targetWhatsapp) {
+          const encodedText = encodeURIComponent(whatsappText);
+          const whatsappUrl = `https://wa.me/${targetWhatsapp}?text=${encodedText}`;
+          
+          const waBox = document.getElementById('whatsappAlertBox');
+          const waLink = document.getElementById('directWhatsappLink');
+          waLink.href = whatsappUrl;
+          waBox.classList.remove('d-none');
+        }
+
         form.reset();
+        locationInput.value = "";
+        getLocationBtn.textContent = "📍 تحديد موقعي";
+        getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
+        currentCoords = "";
       } catch (error) {
         alert('حدث خطأ في اتصال الإنترنت أثناء إرسال البيانات. يرجى التحقق من الشبكة والمحاولة مرة أخرى.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "إرسال القراءات للبوتات";
+        submitBtn.textContent = "إرسال القراءات";
       }
     });
   </script>
