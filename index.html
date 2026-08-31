@@ -216,7 +216,7 @@
           </div>
 
           <div class="col-12 mt-4">
-            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات للبوتات</button>
+            <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات للبوتات والفرع</button>
           </div>
         </div>
       </form>
@@ -297,6 +297,11 @@
     ]; 
 
     const CHAT_IDS = ['6847899466', '8608146763']; 
+
+    // تم إضافة رقم فرع أبيس للتجربة
+    const BRANCH_WHATSAPP = {
+      "أبيس (823)": "201274837786"
+    };
 
     const ADMIN_PASSWORD = "alex123";
     let clickCount = 0;
@@ -402,7 +407,7 @@
           (position) => {
             currentCoords = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
             locationInput.value = currentCoords;
-            getLocationBtn.textContent = "📍 تم التحديد";
+            getLocationBtn.textContent = "📍 تم تحديد الموقع";
             getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
           },
           () => {
@@ -430,7 +435,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال البيانات (برجاء الانتظار)...";
+      submitBtn.textContent = "جاري إرسال القراءات للبوتات...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
@@ -442,6 +447,8 @@
                           `📞 *الهاتف:* \`${phone}\`\n` +
                           `⚠️ *الشكوى:* ${complaint}\n` +
                           `📍 *اللوكيشن:* ${mapsLink}\n`;
+
+      let whatsappText = `قراءة جديدة - فرع: ${branchName}\nالاسم: ${name}\nالهاتف: ${phone}\nالشكوى: ${complaint}\nاللوكيشن: ${mapsLink}`;
 
       try {
         const meterBoxes = document.querySelectorAll('.meter-box');
@@ -455,6 +462,9 @@
           messageText += `\n--- *[عنصر ${index}]* ---\n` +
                          `📊 *القراءة:* \`${mRead} kWh\`\n`;
 
+          whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
+
+          // الإرسال الكامل للبوتات الإدارية
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -484,16 +494,23 @@
 
         alert('تم الارسال بنجاح شكرا لاستخدامك منصه شعاع لتسجيل القراءت');
         
+        // توجيه تفاصيل الفرع المختار إلى رقمه المخصص (إن وجد في القائمة)
+        const targetWhatsapp = BRANCH_WHATSAPP[branchName];
+        if (targetWhatsapp) {
+          const encodedText = encodeURIComponent(whatsappText);
+          window.open(`https://wa.me/${targetWhatsapp}?text=${encodedText}`, '_blank');
+        }
+
         form.reset();
         locationInput.value = "";
         getLocationBtn.textContent = "📍 تحديد موقعي";
         getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
         currentCoords = "";
       } catch (error) {
-        alert('حدث خطأ في اتصال الإنترنت أثناء رفع الصور. يرجى التحقق من الشبكة والمحاولة مرة أخرى.');
+        alert('حدث خطأ في اتصال الإنترنت أثناء إرسال البيانات. يرجى التحقق من الشبكة والمحاولة مرة أخرى.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "إرسال القراءات للبوتات";
+        submitBtn.textContent = "إرسال القراءات للبوتات والفرع";
       }
     });
   </script>
