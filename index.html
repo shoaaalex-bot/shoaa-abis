@@ -208,15 +208,7 @@
         </div>
 
         <div class="row g-4">
-          <div class="col-12">
-            <label class="form-label">موقع العداد (اللوكيشن) <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <input type="text" id="locationInput" class="form-control" placeholder="اضغط تحديد موقعي" readonly required>
-              <button type="button" class="btn btn-outline-secondary px-3" id="getLocationBtn">📍 تحديد موقعي</button>
-            </div>
-          </div>
-
-          <div class="col-12 mt-4">
+          <div class="col-12 mt-2">
             <button type="submit" id="submitBtn" class="btn btn-primary w-100 py-3 fs-5">إرسال القراءات للبوتات</button>
           </div>
 
@@ -289,8 +281,6 @@
   <script>
     const form = document.getElementById('readingForm');
     const submitBtn = document.getElementById('submitBtn');
-    const getLocationBtn = document.getElementById('getLocationBtn');
-    const locationInput = document.getElementById('locationInput');
     const secretAdminTrigger = document.getElementById('secretAdminTrigger');
     const backToClientBtn = document.getElementById('backToClientBtn');
     const clientView = document.getElementById('clientView');
@@ -298,8 +288,6 @@
     const refreshReportsBtn = document.getElementById('refreshReportsBtn');
     const reportsTableBody = document.getElementById('reportsTableBody');
     const totalReadingsCount = document.getElementById('totalReadingsCount');
-    
-    let currentCoords = "";
 
     // البوتات العامة لكل فروع القطاع (تستقبل جميع الفروع دائماً)
     const BOT_TOKENS = [
@@ -413,45 +401,6 @@
       }
     }
 
-    // دالة تحديد الموقع مع مهلة زمنية (Timeout) لمنع التعليق
-    getLocationBtn.addEventListener('click', () => {
-      if (navigator.geolocation) {
-        getLocationBtn.textContent = "جاري التحديد...";
-        getLocationBtn.disabled = true;
-
-        const options = {
-          enableHighAccuracy: true,
-          timeout: 10000, // مهلة 10 ثوانٍ لمنع التعليق الدائم
-          maximumAge: 0
-        };
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            currentCoords = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
-            locationInput.value = currentCoords;
-            getLocationBtn.textContent = "📍 تم تحديد الموقع";
-            getLocationBtn.classList.replace('btn-outline-secondary', 'btn-success');
-            getLocationBtn.disabled = false;
-          },
-          (error) => {
-            let errorMsg = "تعذر تحديد الموقع. يرجى التأكد من تفعيل GPS وإذن الموقع للمتصفح.";
-            if (error.code === error.TIMEOUT) {
-              errorMsg = "انتهت مهلة البحث عن الموقع. يرجى المحاولة في مكان مكشوف أو إعادة محاولة الضغط.";
-            } else if (error.code === error.PERMISSION_DENIED) {
-              errorMsg = "تم رفض إذن الوصول للموقع من قبل المتصفح.";
-            }
-            alert(errorMsg);
-            getLocationBtn.textContent = "📍 تحديد موقعي";
-            getLocationBtn.disabled = false;
-            getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
-          },
-          options
-        );
-      } else {
-        alert('المتصفح الخاص بك لا يدعم خدمة تحديد الموقع.');
-      }
-    });
-
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -461,26 +410,19 @@
         return;
       }
 
-      if (!currentCoords) {
-        alert('الرجاء تحديد الموقع الجغرافي أولاً!');
-        return;
-      }
-
       submitBtn.disabled = true;
       submitBtn.textContent = "جاري إرسال القراءات للبوتات...";
 
       const name = document.getElementById('clientName').value.trim() || 'بدون اسم';
       const phone = document.getElementById('accNo').value;
       const complaint = document.getElementById('complaintInput').value || 'لا يوجد';
-      const mapsLink = `https://www.google.com/maps?q=${currentCoords}`;
       
       let messageText = `⚡ *قراءة جديدة - فرع: ${branchName}*\n\n` +
                           `👤 *الاسم:* ${name}\n` +
                           `📞 *الهاتف:* \`${phone}\`\n` +
-                          `⚠️ *الشكوى:* ${complaint}\n` +
-                          `📍 *اللوكيشن:* ${mapsLink}\n`;
+                          `⚠️ *الشكوى:* ${complaint}\n`;
 
-      let whatsappText = `قراءة جديدة - فرع: ${branchName}\nالاسم: ${name}\nالهاتف: ${phone}\nالشكوى: ${complaint}\nاللوكيشن: ${mapsLink}`;
+      let whatsappText = `قراءة جديدة - فرع: ${branchName}\nالاسم: ${name}\nالهاتف: ${phone}\nالشكوى: ${complaint}`;
 
       try {
         const meterBoxes = document.querySelectorAll('.meter-box');
@@ -567,10 +509,6 @@
         }
 
         form.reset();
-        locationInput.value = "";
-        getLocationBtn.textContent = "📍 تحديد موقعي";
-        getLocationBtn.classList.replace('btn-success', 'btn-outline-secondary');
-        currentCoords = "";
       } catch (error) {
         alert('حدث خطأ في اتصال الإنترنت أثناء إرسال البيانات. يرجى التحقق من الشبكة والمحاولة مرة أخرى.');
       } finally {
