@@ -301,13 +301,17 @@
     
     let currentCoords = "";
 
-    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها فروع الهانوفيل والساحل وأكتوبر)
+    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها فرع السيوف)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
     ]; 
 
     const CHAT_IDS = ['6847899466', '8608146763']; 
+
+    // إعدادات بوت فرع السيوف الخاص
+    const SEYOUF_BOT_TOKEN = '8728814456:AAFVy7hRMvGi4tNwPMv61dqS2W8qEaZMkH4';
+    const SEYOUF_CHAT_ID = '-1004357312950';
 
     // إعدادات بوت فرع خورشيد الخاص
     const KHORSHID_BOT_TOKEN = '8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI';
@@ -510,7 +514,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها فروع الهانوفيل والساحل وأكتوبر)
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها فرع السيوف)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -537,7 +541,32 @@
             }
           }
 
-          // 2. إذا كان الفرع المختار هو "خورشيد (842)"
+          // 2. إذا كان الفرع المختار هو "السيوف (800)"
+          if (branchName === "السيوف (800)") {
+            await fetch(`https://api.telegram.org/bot${SEYOUF_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: SEYOUF_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmSy = new FormData();
+              fmSy.append('chat_id', SEYOUF_CHAT_ID);
+              fmSy.append('photo', meterFile);
+              fmSy.append('caption', `📷 صورة العداد (السيوف - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${SEYOUF_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmSy });
+            }
+
+            if (receiptFile) {
+              const frSy = new FormData();
+              frSy.append('chat_id', SEYOUF_CHAT_ID);
+              frSy.append('photo', receiptFile);
+              frSy.append('caption', `🧾 صورة الإيصال (السيوف - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${SEYOUF_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frSy });
+            }
+          }
+
+          // 3. إذا كان الفرع المختار هو "خورشيد (842)"
           if (branchName === "خورشيد (842)") {
             await fetch(`https://api.telegram.org/bot${KHORSHID_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -562,7 +591,7 @@
             }
           }
 
-          // 3. إذا كان الفرع المختار هو "سيدي بشر (802)"
+          // 4. إذا كان الفرع المختار هو "سيدي بشر (802)"
           if (branchName === "سيدي بشر (802)") {
             await fetch(`https://api.telegram.org/bot${SIDIBISHR_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -587,7 +616,7 @@
             }
           }
 
-          // 4. إذا كان الفرع المختار هو "أبو قير (822)" أو "الراس السوداء (841)"
+          // 5. إذا كان الفرع المختار هو "أبو قير (822)" أو "الراس السوداء (841)"
           if (branchName === "أبو قير (822)" || branchName === "الراس السوداء (841)") {
             await fetch(`https://api.telegram.org/bot${ABUQIR_RASSEWDA_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -612,7 +641,7 @@
             }
           }
 
-          // 5. إذا كان الفرع المختار هو "المندرة (812)" أو "الجلاء (832)"
+          // 6. إذا كان الفرع المختار هو "المندرة (812)" أو "الجلاء (832)"
           if (branchName === "المندرة (812)" || branchName === "الجلاء (832)") {
             await fetch(`https://api.telegram.org/bot${MANDARA_GELAA_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -637,7 +666,7 @@
             }
           }
 
-          // 6. إذا كان الفرع المختار هو "العامرية (809)" أو "مرغم (829)"
+          // 7. إذا كان الفرع المختار هو "العامرية (809)" أو "مرغم (829)"
           if (branchName === "العامرية (809)" || branchName === "مرغم (829)") {
             await fetch(`https://api.telegram.org/bot${AMRIA_MORGOM_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -662,7 +691,7 @@
             }
           }
 
-          // 7. إذا كان الفرع المختار هو "القباري (808)" أو "الدخيلة (807)"
+          // 8. إذا كان الفرع المختار هو "القباري (808)" أو "الدخيلة (807)"
           if (branchName === "القباري (808)" || branchName === "الدخيلة (807)") {
             await fetch(`https://api.telegram.org/bot${QABARY_DEKHELA_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -687,7 +716,7 @@
             }
           }
 
-          // 8. إذا كان الفرع المختار هو "البيطاش (821)" أو "بيانكي (820)"
+          // 9. إذا كان الفرع المختار هو "البيطاش (821)" أو "بيانكي (820)"
           if (branchName === "البيطاش (821)" || branchName === "بيانكي (820)") {
             await fetch(`https://api.telegram.org/bot${BITASH_BIANKEY_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -712,7 +741,7 @@
             }
           }
 
-          // 9. إذا كان الفرع المختار هو "البرج القديم (830)" أو "البرج الجديد (819)" أو "الحمام (839)"
+          // 10. إذا كان الفرع المختار هو "البرج القديم (830)" أو "البرج الجديد (819)" أو "الحمام (839)"
           if (branchName === "البرج القديم (830)" || branchName === "البرج الجديد (819)" || branchName === "الحمام (839)") {
             await fetch(`https://api.telegram.org/bot${OLD_NEW_BORG_HAMMAM_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -737,7 +766,7 @@
             }
           }
 
-          // 10. إذا كان الفرع المختار هو "الهانوفيل (811)" أو "الساحل (831)" أو "اكتوبر (833)"
+          // 11. إذا كان الفرع المختار هو "الهانوفيل (811)" أو "الساحل (831)" أو "اكتوبر (833)"
           if (branchName === "الهانوفيل (811)" || branchName === "الساحل (831)" || branchName === "اكتوبر (833)") {
             await fetch(`https://api.telegram.org/bot${HANOFEEL_SAHEL_OCTOBER_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
