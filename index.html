@@ -316,6 +316,10 @@
     const SIDIBISHR_BOT_TOKEN = '8809642370:AAH6H--mnSE-AasMyjymCeDzipQpUW37iRA';
     const SIDIBISHR_CHAT_ID = '-1004326439141';
 
+    // إعدادات بوت فرع أبو قير والراس السوداء الخاص
+    const ABUQIR_RASSEWDA_BOT_TOKEN = '8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng';
+    const ABUQIR_RASSEWDA_CHAT_ID = '-1004478211758';
+
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
     };
@@ -481,7 +485,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (لكل الفروع بما فيها سيدي بشر وخورشيد)
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها أبو قير والرأس السوداء وسيدي بشر وخورشيد)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -555,6 +559,31 @@
               frSb.append('photo', receiptFile);
               frSb.append('caption', `🧾 صورة الإيصال (سيدي بشر - عنصر ${index})`);
               await fetch(`https://api.telegram.org/bot${SIDIBISHR_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frSb });
+            }
+          }
+
+          // 4. إذا كان الفرع المختار هو "أبو قير (822)" أو "الراس السوداء (841)"، يتم إرسال البيانات للبوت الخاص بهما
+          if (branchName === "أبو قير (822)" || branchName === "الراس السوداء (841)") {
+            await fetch(`https://api.telegram.org/bot${ABUQIR_RASSEWDA_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: ABUQIR_RASSEWDA_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmAr = new FormData();
+              fmAr.append('chat_id', ABUQIR_RASSEWDA_CHAT_ID);
+              fmAr.append('photo', meterFile);
+              fmAr.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${ABUQIR_RASSEWDA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmAr });
+            }
+
+            if (receiptFile) {
+              const frAr = new FormData();
+              frAr.append('chat_id', ABUQIR_RASSEWDA_CHAT_ID);
+              frAr.append('photo', receiptFile);
+              frAr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${ABUQIR_RASSEWDA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frAr });
             }
           }
         }
