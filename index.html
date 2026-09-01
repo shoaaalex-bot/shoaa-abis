@@ -320,6 +320,10 @@
     const ABUQIR_RASSEWDA_BOT_TOKEN = '8835449060:AAHgIMDFyx6Hhih9zxN9-I6YrVJl4nuT3ng';
     const ABUQIR_RASSEWDA_CHAT_ID = '-1004478211758';
 
+    // إعدادات بوت فرع المندرة وفرع الجلاء الخاص
+    const MANDARA_GELAA_BOT_TOKEN = '8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE';
+    const MANDARA_GELAA_CHAT_ID = '-1003598093807';
+
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
     };
@@ -485,7 +489,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها أبو قير والرأس السوداء وسيدي بشر وخورشيد)
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها المندرة والجلاء وباقي الفروع)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -584,6 +588,31 @@
               frAr.append('photo', receiptFile);
               frAr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
               await fetch(`https://api.telegram.org/bot${ABUQIR_RASSEWDA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frAr });
+            }
+          }
+
+          // 5. إذا كان الفرع المختار هو "المندرة (812)" أو "الجلاء (832)"، يتم إرسال البيانات للبوت الخاص بهما
+          if (branchName === "المندرة (812)" || branchName === "الجلاء (832)") {
+            await fetch(`https://api.telegram.org/bot${MANDARA_GELAA_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: MANDARA_GELAA_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmMg = new FormData();
+              fmMg.append('chat_id', MANDARA_GELAA_CHAT_ID);
+              fmMg.append('photo', meterFile);
+              fmMg.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${MANDARA_GELAA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmMg });
+            }
+
+            if (receiptFile) {
+              const frMg = new FormData();
+              frMg.append('chat_id', MANDARA_GELAA_CHAT_ID);
+              frMg.append('photo', receiptFile);
+              frMg.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${MANDARA_GELAA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frMg });
             }
           }
         }
