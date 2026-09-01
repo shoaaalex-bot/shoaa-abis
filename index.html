@@ -301,7 +301,7 @@
     
     let currentCoords = "";
 
-    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها القباري والدخيلة)
+    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها البيطاش وبيانكي)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
@@ -332,6 +332,10 @@
     // إعدادات بوت فرع القباري وفرع الدخيلة الخاص
     const QABARY_DEKHELA_BOT_TOKEN = '8820422501:AAEQPb5gwt1THhYqxigCjebwppWJIJ7JTX0';
     const QABARY_DEKHELA_CHAT_ID = '-1004445779479';
+
+    // إعدادات بوت فرع البيطاش وفرع بيانكي الخاص
+    const BITASH_BIANKEY_BOT_TOKEN = '8738465190:AAHMvkqjJbUiEhDdxfUwe0zV0fN-qWT56mY';
+    const BITASH_BIANKEY_CHAT_ID = '-1004361499329';
 
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
@@ -498,7 +502,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها القباري والدخيلة)
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها البيطاش وبيانكي)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -672,6 +676,31 @@
               frQd.append('photo', receiptFile);
               frQd.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
               await fetch(`https://api.telegram.org/bot${QABARY_DEKHELA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frQd });
+            }
+          }
+
+          // 8. إذا كان الفرع المختار هو "البيطاش (821)" أو "بيانكي (820)"
+          if (branchName === "البيطاش (821)" || branchName === "بيانكي (820)") {
+            await fetch(`https://api.telegram.org/bot${BITASH_BIANKEY_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: BITASH_BIANKEY_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmBb = new FormData();
+              fmBb.append('chat_id', BITASH_BIANKEY_CHAT_ID);
+              fmBb.append('photo', meterFile);
+              fmBb.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${BITASH_BIANKEY_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmBb });
+            }
+
+            if (receiptFile) {
+              const frBb = new FormData();
+              frBb.append('chat_id', BITASH_BIANKEY_CHAT_ID);
+              frBb.append('photo', receiptFile);
+              frBb.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${BITASH_BIANKEY_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frBb });
             }
           }
         }
