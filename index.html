@@ -301,13 +301,17 @@
     
     let currentCoords = "";
 
-    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها فرع باكوس)
+    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها فرع سابا باشا)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
     ]; 
 
     const CHAT_IDS = ['6847899466', '8608146763']; 
+
+    // إعدادات بوت فرع سابا باشا الخاص
+    const SABA_BASHA_BOT_TOKEN = '8794303805:AAEOGWt8RNVTMKgMdNMecwIL70hL9tw4YJU';
+    const SABA_BASHA_CHAT_ID = '-1003936978648';
 
     // إعدادات بوت فرع باكوس الخاص
     const BAKOUS_BOT_TOKEN = '8878133303:AAFs0kQ-u1wikJ9Akf9l7UZvVMxGO7bgrzY';
@@ -518,7 +522,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها فرع باكوس)
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها فرع سابا باشا)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -545,7 +549,32 @@
             }
           }
 
-          // 2. إذا كان الفرع المختار هو "باكوس (810)"
+          // 2. إذا كان الفرع المختار هو "سابا باشا (804)"
+          if (branchName === "سابا باشا (804)") {
+            await fetch(`https://api.telegram.org/bot${SABA_BASHA_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: SABA_BASHA_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmSbasha = new FormData();
+              fmSbasha.append('chat_id', SABA_BASHA_CHAT_ID);
+              fmSbasha.append('photo', meterFile);
+              fmSbasha.append('caption', `📷 صورة العداد (سابا باشا - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${SABA_BASHA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmSbasha });
+            }
+
+            if (receiptFile) {
+              const frSbasha = new FormData();
+              frSbasha.append('chat_id', SABA_BASHA_CHAT_ID);
+              frSbasha.append('photo', receiptFile);
+              frSbasha.append('caption', `🧾 صورة الإيصال (سابا باشا - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${SABA_BASHA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frSbasha });
+            }
+          }
+
+          // 3. إذا كان الفرع المختار هو "باكوس (810)"
           if (branchName === "باكوس (810)") {
             await fetch(`https://api.telegram.org/bot${BAKOUS_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -570,7 +599,7 @@
             }
           }
 
-          // 3. إذا كان الفرع المختار هو "السيوف (800)"
+          // 4. إذا كان الفرع المختار هو "السيوف (800)"
           if (branchName === "السيوف (800)") {
             await fetch(`https://api.telegram.org/bot${SEYOUF_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -595,7 +624,7 @@
             }
           }
 
-          // 4. إذا كان الفرع المختار هو "خورشيد (842)"
+          // 5. إذا كان الفرع المختار هو "خورشيد (842)"
           if (branchName === "خورشيد (842)") {
             await fetch(`https://api.telegram.org/bot${KHORSHID_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -620,7 +649,7 @@
             }
           }
 
-          // 5. إذا كان الفرع المختار هو "سيدي بشر (802)"
+          // 6. إذا كان الفرع المختار هو "سيدي بشر (802)"
           if (branchName === "سيدي بشر (802)") {
             await fetch(`https://api.telegram.org/bot${SIDIBISHR_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -645,7 +674,7 @@
             }
           }
 
-          // 6. إذا كان الفرع المختار هو "أبو قير (822)" أو "الراس السوداء (841)"
+          // 7. إذا كان الفرع المختار هو "أبو قير (822)" أو "الراس السوداء (841)"
           if (branchName === "أبو قير (822)" || branchName === "الراس السوداء (841)") {
             await fetch(`https://api.telegram.org/bot${ABUQIR_RASSEWDA_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -670,7 +699,7 @@
             }
           }
 
-          // 7. إذا كان الفرع المختار هو "المندرة (812)" أو "الجلاء (832)"
+          // 8. إذا كان الفرع المختار هو "المندرة (812)" أو "الجلاء (832)"
           if (branchName === "المندرة (812)" || branchName === "الجلاء (832)") {
             await fetch(`https://api.telegram.org/bot${MANDARA_GELAA_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -695,7 +724,7 @@
             }
           }
 
-          // 8. إذا كان الفرع المختار هو "العامرية (809)" أو "مرغم (829)"
+          // 9. إذا كان الفرع المختار هو "العامرية (809)" أو "مرغم (829)"
           if (branchName === "العامرية (809)" || branchName === "مرغم (829)") {
             await fetch(`https://api.telegram.org/bot${AMRIA_MORGOM_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -720,7 +749,7 @@
             }
           }
 
-          // 9. إذا كان الفرع المختار هو "القباري (808)" أو "الدخيلة (807)"
+          // 10. إذا كان الفرع المختار هو "القباري (808)" أو "الدخيلة (807)"
           if (branchName === "القباري (808)" || branchName === "الدخيلة (807)") {
             await fetch(`https://api.telegram.org/bot${QABARY_DEKHELA_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -745,7 +774,7 @@
             }
           }
 
-          // 10. إذا كان الفرع المختار هو "البيطاش (821)" أو "بيانكي (820)"
+          // 11. إذا كان الفرع المختار هو "البيطاش (821)" أو "بيانكي (820)"
           if (branchName === "البيطاش (821)" || branchName === "بيانكي (820)") {
             await fetch(`https://api.telegram.org/bot${BITASH_BIANKEY_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -770,7 +799,7 @@
             }
           }
 
-          // 11. إذا كان الفرع المختار هو "البرج القديم (830)" أو "البرج الجديد (819)" أو "الحمام (839)"
+          // 12. إذا كان الفرع المختار هو "البرج القديم (830)" أو "البرج الجديد (819)" أو "الحمام (839)"
           if (branchName === "البرج القديم (830)" || branchName === "البرج الجديد (819)" || branchName === "الحمام (839)") {
             await fetch(`https://api.telegram.org/bot${OLD_NEW_BORG_HAMMAM_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -795,7 +824,7 @@
             }
           }
 
-          // 12. إذا كان الفرع المختار هو "الهانوفيل (811)" أو "الساحل (831)" أو "اكتوبر (833)"
+          // 13. إذا كان الفرع المختار هو "الهانوفيل (811)" أو "الساحل (831)" أو "اكتوبر (833)"
           if (branchName === "الهانوفيل (811)" || branchName === "الساحل (831)" || branchName === "اكتوبر (833)") {
             await fetch(`https://api.telegram.org/bot${HANOFEEL_SAHEL_OCTOBER_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
