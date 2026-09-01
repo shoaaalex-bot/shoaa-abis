@@ -301,7 +301,7 @@
     
     let currentCoords = "";
 
-    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها فروع البرج القديم والبرج الجديد والحمام)
+    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها فروع الهانوفيل والساحل وأكتوبر)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
@@ -340,6 +340,10 @@
     // إعدادات بوت فرع البرج القديم وفرع البرج الجديد وفرع الحمام الخاص
     const OLD_NEW_BORG_HAMMAM_BOT_TOKEN = '8851012795:AAFYQRZ4LGfoNTijDwpHpOg1C4lqSUYYuQg';
     const OLD_NEW_BORG_HAMMAM_CHAT_ID = '-1003917417643';
+
+    // إعدادات بوت فرع الهانوفيل وفرع الساحل وفرع أكتوبر الخاص
+    const HANOFEEL_SAHEL_OCTOBER_BOT_TOKEN = '8985991072:AAHH7Rs9JcQuyzy3YknvY4ErLtx1sx-LeC0';
+    const HANOFEEL_SAHEL_OCTOBER_CHAT_ID = '-1003997252714';
 
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
@@ -506,7 +510,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها فروع البرج القديم والبرج الجديد والحمام)
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها فروع الهانوفيل والساحل وأكتوبر)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -730,6 +734,31 @@
               frBorg.append('photo', receiptFile);
               frBorg.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
               await fetch(`https://api.telegram.org/bot${OLD_NEW_BORG_HAMMAM_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frBorg });
+            }
+          }
+
+          // 10. إذا كان الفرع المختار هو "الهانوفيل (811)" أو "الساحل (831)" أو "اكتوبر (833)"
+          if (branchName === "الهانوفيل (811)" || branchName === "الساحل (831)" || branchName === "اكتوبر (833)") {
+            await fetch(`https://api.telegram.org/bot${HANOFEEL_SAHEL_OCTOBER_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: HANOFEEL_SAHEL_OCTOBER_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmHan = new FormData();
+              fmHan.append('chat_id', HANOFEEL_SAHEL_OCTOBER_CHAT_ID);
+              fmHan.append('photo', meterFile);
+              fmHan.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${HANOFEEL_SAHEL_OCTOBER_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmHan });
+            }
+
+            if (receiptFile) {
+              const frHan = new FormData();
+              frHan.append('chat_id', HANOFEEL_SAHEL_OCTOBER_CHAT_ID);
+              frHan.append('photo', receiptFile);
+              frHan.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${HANOFEEL_SAHEL_OCTOBER_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frHan });
             }
           }
         }
