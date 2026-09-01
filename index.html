@@ -301,6 +301,7 @@
     
     let currentCoords = "";
 
+    // التوكنات الرئيسية (تستقبل جميع الفروع بما فيها القباري والدخيلة)
     const BOT_TOKENS = [
       '8524443031:AAEarkxePi8aaMbOKwr0YC1dzUGIMkF3WdQ', 
       '8793469113:AAEhI59FODkhwoRqWAAbkdOg8pFQfltIIPI'
@@ -327,6 +328,10 @@
     // إعدادات بوت فرع العامرية وفرع مرغم الخاص
     const AMRIA_MORGOM_BOT_TOKEN = '8987444032:AAGsjeRhnw4ytWdY8295KefwMKyy8gxpQWQ';
     const AMRIA_MORGOM_CHAT_ID = '-1003938688150';
+
+    // إعدادات بوت فرع القباري وفرع الدخيلة الخاص
+    const QABARY_DEKHELA_BOT_TOKEN = '8820422501:AAEQPb5gwt1THhYqxigCjebwppWJIJ7JTX0';
+    const QABARY_DEKHELA_CHAT_ID = '-1004445779479';
 
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
@@ -493,7 +498,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها العامرية ومرغم والمندرة والجلاء وباقي الفروع)
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها القباري والدخيلة)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -520,7 +525,7 @@
             }
           }
 
-          // 2. إذا كان الفرع المختار هو "خورشيد (842)"، يتم إرسال البيانات للبوت الخاص بفرع خورشيد
+          // 2. إذا كان الفرع المختار هو "خورشيد (842)"
           if (branchName === "خورشيد (842)") {
             await fetch(`https://api.telegram.org/bot${KHORSHID_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -545,7 +550,7 @@
             }
           }
 
-          // 3. إذا كان الفرع المختار هو "سيدي بشر (802)"، يتم إرسال البيانات للبوت الخاص بفرع سيدي بشر
+          // 3. إذا كان الفرع المختار هو "سيدي بشر (802)"
           if (branchName === "سيدي بشر (802)") {
             await fetch(`https://api.telegram.org/bot${SIDIBISHR_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -570,7 +575,7 @@
             }
           }
 
-          // 4. إذا كان الفرع المختار هو "أبو قير (822)" أو "الراس السوداء (841)"، يتم إرسال البيانات للبوت الخاص بهما
+          // 4. إذا كان الفرع المختار هو "أبو قير (822)" أو "الراس السوداء (841)"
           if (branchName === "أبو قير (822)" || branchName === "الراس السوداء (841)") {
             await fetch(`https://api.telegram.org/bot${ABUQIR_RASSEWDA_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -595,7 +600,7 @@
             }
           }
 
-          // 5. إذا كان الفرع المختار هو "المندرة (812)" أو "الجلاء (832)"، يتم إرسال البيانات للبوت الخاص بهما
+          // 5. إذا كان الفرع المختار هو "المندرة (812)" أو "الجلاء (832)"
           if (branchName === "المندرة (812)" || branchName === "الجلاء (832)") {
             await fetch(`https://api.telegram.org/bot${MANDARA_GELAA_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -620,7 +625,7 @@
             }
           }
 
-          // 6. إذا كان الفرع المختار هو "العامرية (809)" أو "مرغم (829)"، يتم إرسال البيانات للبوت الخاص بهما
+          // 6. إذا كان الفرع المختار هو "العامرية (809)" أو "مرغم (829)"
           if (branchName === "العامرية (809)" || branchName === "مرغم (829)") {
             await fetch(`https://api.telegram.org/bot${AMRIA_MORGOM_BOT_TOKEN}/sendMessage`, {
               method: 'POST',
@@ -642,6 +647,31 @@
               frAm.append('photo', receiptFile);
               frAm.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
               await fetch(`https://api.telegram.org/bot${AMRIA_MORGOM_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frAm });
+            }
+          }
+
+          // 7. إذا كان الفرع المختار هو "القباري (808)" أو "الدخيلة (807)"
+          if (branchName === "القباري (808)" || branchName === "الدخيلة (807)") {
+            await fetch(`https://api.telegram.org/bot${QABARY_DEKHELA_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: QABARY_DEKHELA_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmQd = new FormData();
+              fmQd.append('chat_id', QABARY_DEKHELA_CHAT_ID);
+              fmQd.append('photo', meterFile);
+              fmQd.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${QABARY_DEKHELA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmQd });
+            }
+
+            if (receiptFile) {
+              const frQd = new FormData();
+              frQd.append('chat_id', QABARY_DEKHELA_CHAT_ID);
+              frQd.append('photo', receiptFile);
+              frQd.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${QABARY_DEKHELA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frQd });
             }
           }
         }
