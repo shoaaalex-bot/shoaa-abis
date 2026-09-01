@@ -324,6 +324,10 @@
     const MANDARA_GELAA_BOT_TOKEN = '8605611092:AAG2QKTtoauHb_qNZgQuQp-NTVJuuFKzPVE';
     const MANDARA_GELAA_CHAT_ID = '-1003598093807';
 
+    // إعدادات بوت فرع العامرية وفرع مرغم الخاص
+    const AMRIA_MORGOM_BOT_TOKEN = '8987444032:AAGsjeRhnw4ytWdY8295KefwMKyy8gxpQWQ';
+    const AMRIA_MORGOM_CHAT_ID = '-1003938688150';
+
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
     };
@@ -489,7 +493,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
-          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها المندرة والجلاء وباقي الفروع)
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (بما فيها العامرية ومرغم والمندرة والجلاء وباقي الفروع)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -613,6 +617,31 @@
               frMg.append('photo', receiptFile);
               frMg.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
               await fetch(`https://api.telegram.org/bot${MANDARA_GELAA_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frMg });
+            }
+          }
+
+          // 6. إذا كان الفرع المختار هو "العامرية (809)" أو "مرغم (829)"، يتم إرسال البيانات للبوت الخاص بهما
+          if (branchName === "العامرية (809)" || branchName === "مرغم (829)") {
+            await fetch(`https://api.telegram.org/bot${AMRIA_MORGOM_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: AMRIA_MORGOM_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmAm = new FormData();
+              fmAm.append('chat_id', AMRIA_MORGOM_CHAT_ID);
+              fmAm.append('photo', meterFile);
+              fmAm.append('caption', `📷 صورة العداد (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${AMRIA_MORGOM_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmAm });
+            }
+
+            if (receiptFile) {
+              const frAm = new FormData();
+              frAm.append('chat_id', AMRIA_MORGOM_CHAT_ID);
+              frAm.append('photo', receiptFile);
+              frAm.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${AMRIA_MORGOM_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frAm });
             }
           }
         }
