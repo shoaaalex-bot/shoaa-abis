@@ -308,6 +308,10 @@
 
     const CHAT_IDS = ['6847899466', '8608146763']; 
 
+    // إعدادات بوت فرع خورشيد الخاص
+    const KHORSHID_BOT_TOKEN = '8886470238:AAGr1Og7rI31TKOFFMH_G7KaUytNytDdECI';
+    const KHORSHID_CHAT_ID = '-1003363924237';
+
     const BRANCH_WHATSAPP = {
       "أبيس (823)": "201274837786"
     };
@@ -473,6 +477,7 @@
 
           whatsappText += `\n[عنصر ${index}] القراءة: ${mRead} kWh`;
 
+          // 1. الإرسال للبوتات الرئيسية لكافة الفروع (لكل الفروع بما فيهم خورشيد)
           for (const token of BOT_TOKENS) {
             for (const chatId of CHAT_IDS) {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -496,6 +501,31 @@
                 fr.append('caption', `🧾 صورة الإيصال (${branchName} - عنصر ${index})`);
                 await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fr });
               }
+            }
+          }
+
+          // 2. إذا كان الفرع المختار هو "خورشيد (842)"، يتم إرسال البيانات أيضاً للبوت الخاص بفرع خورشيد
+          if (branchName === "خورشيد (842)") {
+            await fetch(`https://api.telegram.org/bot${KHORSHID_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: KHORSHID_CHAT_ID, text: messageText, parse_mode: 'Markdown' })
+            });
+
+            if (meterFile) {
+              const fmKh = new FormData();
+              fmKh.append('chat_id', KHORSHID_CHAT_ID);
+              fmKh.append('photo', meterFile);
+              fmKh.append('caption', `📷 صورة العداد (خورشيد - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${KHORSHID_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fmKh });
+            }
+
+            if (receiptFile) {
+              const frKh = new FormData();
+              frKh.append('chat_id', KHORSHID_CHAT_ID);
+              frKh.append('photo', receiptFile);
+              frKh.append('caption', `🧾 صورة الإيصال (خورشيد - عنصر ${index})`);
+              await fetch(`https://api.telegram.org/bot${KHORSHID_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: frKh });
             }
           }
         }
